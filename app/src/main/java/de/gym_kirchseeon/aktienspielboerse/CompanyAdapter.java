@@ -8,7 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHolder> {
+
+    private ArrayList<JSONObject> jObjList;
+
+    public CompanyAdapter(ArrayList<JSONObject> jObjList) {
+        this.jObjList = jObjList;
+    }
 
     @NonNull
     @Override
@@ -21,21 +32,34 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        String change = "-1,5%";
+        JSONObject jObj = jObjList.get(position);
 
-        holder.companyNameTxt.setText("Unternehmen");
-        holder.shareWorthTxt.setText("0€");
-        holder.changeCompaniesTxt.setText(change);
-        if (change.contains("+")) {
-            holder.changeCompaniesTxt.setTextColor(Color.parseColor("#00c853"));
-        } else if (change.contains("-")) {
-            holder.changeCompaniesTxt.setTextColor(Color.parseColor("#d50000"));
+        try {
+            String name = jObj.getString("name");
+            double worth = jObj.getDouble("worth");
+            double change = jObj.getDouble("change");
+
+            holder.companyNameTxt.setText(name);
+            holder.shareWorthTxt.setText(String.format("%.2f€", worth));
+            holder.changeCompaniesTxt.setText(String.format("%.1f%%", change));
+            if (change > 0) {
+                holder.changeCompaniesTxt.setTextColor(Color.parseColor("#00c853"));
+            } else if (change < 0) {
+                holder.changeCompaniesTxt.setTextColor(Color.parseColor("#d50000"));
+            }
+        } catch (JSONException e) {
+            holder.companyNameTxt.setText("Fehler");
+            holder.shareWorthTxt.setText("Fehler");
+            holder.changeCompaniesTxt.setText("Fehler");
         }
     }
 
     @Override
     public int getItemCount() {
-        return 50;
+        if (jObjList != null) {
+            return jObjList.size();
+        }
+        return 0;
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {

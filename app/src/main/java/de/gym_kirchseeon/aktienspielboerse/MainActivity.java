@@ -10,25 +10,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
+    ArrayList<JSONObject> jObjList = new ArrayList<>();
     private FloatingActionButton fab;
     private TextView moneyTxt;
     private TextView sharesTxt;
+    private TextView sumTxt;
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private RecyclerView recyclerShares;
     private SharesAdapter sAdapter;
     private ScrollView scrollMain;
-
     private float money;
     private float sharesWorth;
+    private JSONObject jObj = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +50,23 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fabMain);
         moneyTxt = findViewById(R.id.moneyTxt);
         sharesTxt = findViewById(R.id.sharesTxt);
+        sumTxt = findViewById(R.id.sumTxt);
         toolbarLayout = findViewById(R.id.abMainLayout);
         recyclerShares = findViewById(R.id.recyclerShares);
         scrollMain = findViewById(R.id.scrollMain);
         scrollMain.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
-        sAdapter = new SharesAdapter();
+        try {
+            jObj.put("name", "BMW");
+            jObj.put("worth", 143.23);
+            jObj.put("count", 5);
+            jObj.put("change", -1.5);
+
+            jObjList.add(jObj);
+        } catch (JSONException e) {
+        }
+
+        sAdapter = new SharesAdapter(jObjList);
         RecyclerView.LayoutManager cLayoutManager = new CustomGridLayoutManager(getApplicationContext()) {
             @Override
             public boolean canScrollVertically() {
@@ -83,16 +103,52 @@ public class MainActivity extends AppCompatActivity {
 
     private void refresh(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEdit = sharedPref.edit();
+
+        if (sharedPref.getBoolean("isFirstRun", true)) {
+            sharedPrefEdit.putBoolean("isFirstRun", false);
+            sharedPrefEdit.putFloat(getString(R.string.moneyShared), 5000);
+            sharedPrefEdit.commit();
+        }
+
+        float shareWorth = 0;
+
+        for (int i = 0; i < jObjList.size(); i++) {
+            try {
+                shareWorth += jObjList.get(i).getDouble("worth") * jObjList.get(i).getDouble("count");
+            } catch (JSONException e) {
+            }
+        }
+        sharedPrefEdit.putFloat(getString(R.string.sharesWorthShared), shareWorth);
+        sharedPrefEdit.commit();
+
         money = sharedPref.getFloat(getString(R.string.moneyShared), 0);
         sharesWorth = sharedPref.getFloat(getString(R.string.sharesWorthShared), 0);
 
-        moneyTxt.setText(money + "€");
-        sharesTxt.setText(sharesWorth + "€");
+        moneyTxt.setText(String.format("%.2f€", money));
+        sharesTxt.setText(String.format("%.2f€", sharesWorth));
+        sumTxt.setText(String.format("%.2f€", money + sharesWorth));
     }
 
     public void onShareClick(View v) {
         Intent i = new Intent(MainActivity.this, CompanyActivity.class);
-        i.putExtra("company", "Unternehmen");
+        try {
+            i.putExtra("company", jObj.getString("name"));
+            i.putExtra("worth", jObj.getDouble("worth"));
+        } catch (JSONException e) {
+            i.putExtra("company", "Fehler");
+            i.putExtra("worth", 0);
+        }
         startActivity(i);
+    }
+
+    public void refresh(MenuItem item) {
+        refresh(MainActivity.this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        return true;
     }
 }

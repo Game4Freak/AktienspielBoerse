@@ -43,6 +43,6 @@ public class DownloadJsonTask extends AsyncTask<String, Void, JSONObject> {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-
+        return null; //TODO: ERSETZEN! nur für Kompilieren drinnen
     }
 }

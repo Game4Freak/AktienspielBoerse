@@ -22,6 +22,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabBuy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/colorBackground"
+        android:src="@drawable/ic_buy"
+        app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <ScrollView
         android:id="@+id/scrollCompany"
@@ -43,23 +57,67 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorBackgroundAccent"
+                android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@+id/abCompany">
 
                 <com.jjoe64.graphview.GraphView
                     android:id="@+id/graphShare"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginBottom="@dimen/graph_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginLeft="@dimen/graph_horizontal_margin"
                     android:layout_marginRight="@dimen/graph_horizontal_margin"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:background="@color/colorBackgroundAccent"
                     app:layout_constraintTop_toBottomOf="@+id/abCompany"
                     tools:layout_editor_absoluteX="8dp" />
+
+                <TextView
+                    android:id="@+id/worthCompanyTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/colorDarkText"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="center"
+                    android:text="Aktienkurs"
+                    android:textColor="@color/colorLightText" />
             </LinearLayout>
 
             <View
-                android:id="@+id/dividerGraph"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintTop_toBottomOf="@id/backGroundGraph" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/recycler_title_bottom_margin"
+                android:layout_marginEnd="@dimen/recycler_horizontal_margin"
+                android:layout_marginStart="@dimen/recycler_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Beschreibung"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/recycler_vertical_margin"
+                android:paddingLeft="@dimen/recycler_horizontal_margin"
+                android:paddingRight="@dimen/recycler_horizontal_margin"
+                android:paddingTop="@dimen/recycler_vertical_margin"
+                android:text="@string/large_text" />
+
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorDivider"

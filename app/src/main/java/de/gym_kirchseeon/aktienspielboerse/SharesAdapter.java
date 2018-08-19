@@ -8,7 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class SharesAdapter extends RecyclerView.Adapter<SharesAdapter.viewHolder> {
+
+    private ArrayList<JSONObject> jObjList;
+
+    public SharesAdapter(ArrayList<JSONObject> jObjList) {
+        this.jObjList = jObjList;
+    }
 
     @NonNull
     @Override
@@ -21,22 +32,34 @@ public class SharesAdapter extends RecyclerView.Adapter<SharesAdapter.viewHolder
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        String change = "-1,5%";
+        JSONObject jObj = jObjList.get(position);
 
-        holder.companySharesNameTxt.setText("Unternehmen");
-        holder.shareMultiplicationTxt.setText("5 x 200€");
-        holder.changeTxt.setText(change);
-        if (change.contains("+")) {
-            holder.changeTxt.setTextColor(Color.parseColor("#00c853"));
-        } else if (change.contains("-")) {
-            holder.changeTxt.setTextColor(Color.parseColor("#d50000"));
+        try {
+            String name = jObj.getString("name");
+            double worth = jObj.getDouble("worth");
+            double change = jObj.getDouble("change");
+            int count = jObj.getInt("count");
+
+            holder.companySharesNameTxt.setText(name);
+            holder.sharesSumWorthTxt.setText(String.format("%.2f€", worth * count));
+            holder.shareMultiplicationTxt.setText(String.format("%d x %.2f€", count, worth));
+            holder.changeTxt.setText(String.format("%.1f%%", change));
+            if (change > 0) {
+                holder.changeTxt.setTextColor(Color.parseColor("#00c853"));
+            } else if (change < 0) {
+                holder.changeTxt.setTextColor(Color.parseColor("#d50000"));
+            }
+        } catch (JSONException e) {
+            holder.companySharesNameTxt.setText("Fehler");
+            holder.sharesSumWorthTxt.setText("Fehler");
+            holder.shareMultiplicationTxt.setText("Fehler");
+            holder.changeTxt.setText("Fehler");
         }
-        holder.sharesSumWorthTxt.setText("1000€");
     }
 
     @Override
     public int getItemCount() {
-        return 50;
+        return jObjList.size();
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {

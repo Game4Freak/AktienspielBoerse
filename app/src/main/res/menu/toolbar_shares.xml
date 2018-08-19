@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/refreshShares"
+        android:icon="@drawable/ic_refresh"
+        android:onClick="refresh"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/sortShares"
         android:icon="@drawable/ic_sort"
         android:onClick="showPopup"
@@ -13,6 +20,7 @@
         android:id="@+id/searchShares"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
-        app:showAsAction="always" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom" />
 
 </menu>

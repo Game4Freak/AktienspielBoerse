@@ -2,80 +2,35 @@
 <instant-run
     abi="arm64-v8a,armeabi-v7a,armeabi"
     api-level="27"
-    build-mode="FULL"
+    build-mode="HOT_WARM"
     density="420dpi"
     format="10"
     plugin-version="3.1.4"
-    timestamp="1534681704793"
+    timestamp="1534714985589"
     token="-9104006848741811681"
-    verifier="FULL_BUILD_REQUESTED" >
+    verifier="COMPATIBLE" >
 
     <task
         name="javac"
-        duration="2877" />
+        duration="361" />
     <task
         name="instant-run-dex"
-        duration="0" />
+        duration="12" />
     <task
         name="instant-run-transform"
-        duration="990" />
+        duration="16" />
     <task
         name="verifier"
-        duration="172" />
+        duration="4" />
 
     <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-        type="SPLIT_MAIN" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\dep\dependencies.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
-        type="SPLIT" />
+        location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\reload-dex\debug\classes.dex"
+        type="RELOAD_DEX" />
 
     <build
         build-mode="FULL"
-        timestamp="1534681704793"
+        timestamp="1534713658230"
         verifier="FULL_BUILD_REQUESTED" >
-        <artifact
-            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
-            type="SPLIT" />
-        <artifact
-            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
-            type="SPLIT" />
-        <artifact
-            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
         <artifact
             location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
             type="SPLIT" />
@@ -89,10 +44,16 @@
             location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
         <artifact
-            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
             type="SPLIT" />
         <artifact
             location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
         <artifact
             location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
@@ -106,6 +67,61 @@
         <artifact
             location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
             type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
+    </build>
+    <build
+        build-mode="COLD"
+        timestamp="1534714696103"
+        verifier="CLASS_ADDED" >
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            type="SPLIT" />
+    </build>
+    <build
+        build-mode="COLD"
+        timestamp="1534714850450"
+        verifier="METHOD_DELETED" >
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
+            type="SPLIT" />
+    </build>
+    <build
+        build-mode="HOT_WARM"
+        timestamp="1534714934918"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
+            type="SPLIT" />
+    </build>
+    <build
+        build-mode="HOT_WARM"
+        timestamp="1534714960781"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\builds\debug\1534714960781\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        build-mode="HOT_WARM"
+        timestamp="1534714985589"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="D:\Chrissi\Documents\AndroidStudio\AktienspielBoerse\app\build\intermediates\reload-dex\debug\classes.dex"
+            type="RELOAD_DEX" />
     </build>
 
 </instant-run>

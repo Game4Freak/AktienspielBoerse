@@ -1,4 +1,4 @@
-#Sun Aug 19 12:56:10 CEST 2018
-base.0=D\:\\Chrissi\\Documents\\AndroidStudio\\AktienspielBoerse\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\44
+#Sun Aug 19 22:00:07 CEST 2018
+base.0=D\:\\Chrissi\\Documents\\AndroidStudio\\AktienspielBoerse\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\63
 path.0=classes.dex
 renamed.0=classes.dex
