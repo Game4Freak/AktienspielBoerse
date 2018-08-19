@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="onCompanyClick"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/recycler_vertical_margin"
+    android:paddingLeft="@dimen/recycler_horizontal_margin"
+    android:paddingRight="@dimen/recycler_horizontal_margin"
+    android:paddingTop="@dimen/recycler_vertical_margin">
+
+    <TextView
+        android:id="@+id/companyNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center_vertical|left"
+        android:layout_row="1"
+        android:gravity="center_vertical|left"
+        android:textColor="@color/colorDarkText"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/shareWorthTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center_vertical|right"
+        android:layout_row="1"
+        android:gravity="center_vertical|right"
+        android:textColor="@color/colorLightText" />
+
+    <TextView
+        android:id="@+id/changeCompaniesTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnSpan="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center_vertical|left"
+        android:layout_row="2"
+        android:gravity="center_vertical|left"
+        android:textColor="@color/colorLightText" />
+
+</GridLayout>

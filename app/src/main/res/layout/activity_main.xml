@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/abMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundAccent"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/colorBackground"
+        android:src="@drawable/ic_note_add"
+        app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toBottomOf="@+id/abMainLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/gridMoney"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorBackgroundAccent"
+                android:orientation="horizontal"
+                android:paddingBottom="24dp"
+                android:paddingTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/abMain">
+
+                <TextView
+                    android:id="@+id/sumTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="5"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_row="1"
+                    android:text="4598,23€"
+                    android:textColor="@color/colorDarkText"
+                    android:textSize="50sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/moneyImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_row="2"
+                    android:background="@android:color/transparent"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    app:srcCompat="@drawable/ic_money" />
+
+                <TextView
+                    android:id="@+id/moneyTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_row="2"
+                    android:background="@android:color/transparent"
+                    android:text="TextView"
+                    android:textColor="@color/colorLightText"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/sharesImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_row="2"
+                    android:background="@android:color/transparent"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    app:srcCompat="@drawable/outline_assessment_black_36" />
+
+                <TextView
+                    android:id="@+id/sharesTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="4"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_row="2"
+                    android:background="@android:color/transparent"
+                    android:text="TextView"
+                    android:textColor="@color/colorLightText"
+                    android:textSize="15sp" />
+
+            </GridLayout>
+
+            <View
+                android:id="@+id/dividerMoney"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintTop_toBottomOf="@id/gridMoney" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/recycler_horizontal_margin"
+                android:layout_marginStart="@dimen/recycler_horizontal_margin"
+                android:layout_marginTop="@dimen/recycler_title_top_margin"
+                android:text="Aktien"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/dividerMoney"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gridMoney" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerShares"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/recycler_title_bottom_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

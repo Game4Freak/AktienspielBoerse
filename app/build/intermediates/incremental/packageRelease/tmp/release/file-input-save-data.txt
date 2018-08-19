@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Fri Aug 17 20:20:53 CEST 2018
+0.baseType=DIRECTORY
+0.base=D\:\\Chrissi\\Documents\\AndroidStudio\\AktienspielBoerse\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
+0.path=classes.dex
+0.set=DEX
+count=1
