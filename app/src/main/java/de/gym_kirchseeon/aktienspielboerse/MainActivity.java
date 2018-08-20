@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (sharedPref.getBoolean("isFirstRun", true)) {
             sharedPrefEdit.putBoolean("isFirstRun", false);
             sharedPrefEdit.putFloat(getString(R.string.moneyShared), 5000);
-            sharedPrefEdit.commit();
+            sharedPrefEdit.apply();
         }
 
         float shareWorth = 0;
@@ -133,16 +134,17 @@ public class MainActivity extends AppCompatActivity {
     public void onShareClick(View v) {
         Intent i = new Intent(MainActivity.this, CompanyActivity.class);
         try {
-            i.putExtra("company", jObj.getString("name"));
+            i.putExtra("name", jObj.getString("name"));
             i.putExtra("worth", jObj.getDouble("worth"));
         } catch (JSONException e) {
-            i.putExtra("company", "Fehler");
+            i.putExtra("name", "Fehler");
             i.putExtra("worth", 0);
         }
         startActivity(i);
     }
 
     public void refresh(MenuItem item) {
+        Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
         refresh(MainActivity.this);
     }
 

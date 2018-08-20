@@ -1,16 +1,20 @@
 package de.gym_kirchseeon.aktienspielboerse;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CompanyActivity extends AppCompatActivity {
 
@@ -19,8 +23,12 @@ public class CompanyActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private ScrollView scrollCompany;
     private TextView worthCompanyTxt;
+    private TextView companyNameBuyTxt;
+    private TextView companyWorthBuyTxt;
+    private NumberPicker buyCountPicker;
+    private Button buyBtn;
 
-    private String company;
+    private String name;
     private double worth;
 
     @Override
@@ -29,12 +37,12 @@ public class CompanyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_company);
 
         Intent i = getIntent();
-        company = i.getStringExtra("company");
+        name = i.getStringExtra("name");
         worth = i.getDoubleExtra("worth", 0);
 
         toolbar = findViewById(R.id.abCompany);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
-        toolbar.setTitle(company);
+        toolbar.setTitle(name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -56,9 +64,7 @@ public class CompanyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast t = Toast.makeText(CompanyActivity.this, String.format("Du hast eine Aktie von %s für %.2f€ gekauft!", company, worth), Toast.LENGTH_LONG);
-                t.show();
-                //TODO: Kaufen!
+                showBuyDialog();
             }
         });
 
@@ -73,5 +79,45 @@ public class CompanyActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void buy(final View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setAction("Rückgängig", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
+                        //TODO: Rückgängig
+                    }
+                }).show();
+    }
+
+    private void showBuyDialog() {
+        AlertDialog.Builder dialogBuyBuilder = new AlertDialog.Builder(this);
+        LayoutInflater lInflater = getLayoutInflater();
+        final View layout = lInflater.inflate(R.layout.buy_popup, null);
+        dialogBuyBuilder.setView(layout);
+        final AlertDialog dialogBuy = dialogBuyBuilder.create();
+
+        companyNameBuyTxt = layout.findViewById(R.id.companyNameBuyTxt);
+        companyWorthBuyTxt = layout.findViewById(R.id.companyWorthBuyTxt);
+        buyCountPicker = layout.findViewById(R.id.buyCountPicker);
+        buyBtn = layout.findViewById(R.id.buyBtn);
+
+        companyNameBuyTxt.setText(name);
+        companyWorthBuyTxt.setText(String.format("%.2f€", worth));
+        buyCountPicker.setMinValue(1);
+        buyCountPicker.setMaxValue(100);
+
+        buyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int countBuy = buyCountPicker.getValue();
+                //TODO: Kaufen
+                dialogBuy.dismiss();
+                buy(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
+            }
+        });
+        dialogBuy.show();
     }
 }

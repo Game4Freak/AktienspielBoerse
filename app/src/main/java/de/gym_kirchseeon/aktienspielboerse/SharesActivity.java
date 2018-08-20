@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,8 @@ public class SharesActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private ScrollView scrollShares;
+    ArrayList<JSONObject> jObjList = new ArrayList<>();
+    JSONObject jObj = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +55,10 @@ public class SharesActivity extends AppCompatActivity {
         scrollShares = findViewById(R.id.scrollShares);
         scrollShares.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
-        ArrayList<JSONObject> jObjList = new ArrayList<>();
-
         try {
-            JSONObject jObj = new JSONObject();
             jObj.put("name", "BMW");
             jObj.put("worth", 143.23);
             jObj.put("change", -1.5);
-
             jObjList.add(jObj);
         } catch (JSONException e) {
         }
@@ -120,12 +119,18 @@ public class SharesActivity extends AppCompatActivity {
 
     public void onCompanyClick(View v) {
         Intent i = new Intent(SharesActivity.this, CompanyActivity.class);
-        i.putExtra("company", "BMW");
-        i.putExtra("worth", 243.53);
+        try {
+            i.putExtra("name", jObj.getString("name"));
+            i.putExtra("worth", jObj.getDouble("worth"));
+        } catch (JSONException e) {
+            i.putExtra("name", "Fehler");
+            i.putExtra("worth", 0);
+        }
         startActivity(i);
     }
 
     public void refresh(MenuItem item) {
         //TODO: Neu laden
+        Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
     }
 }
