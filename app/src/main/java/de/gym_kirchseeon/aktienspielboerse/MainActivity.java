@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +27,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<JSONObject> jObjList = new ArrayList<>();
+    private ArrayList<JSONObject> jObjList = new ArrayList<>();
+    private GridLayout gridMain;
     private FloatingActionButton fab;
+    private Button scrollUpMain;
     private TextView moneyTxt;
     private TextView sharesTxt;
     private TextView sumTxt;
@@ -49,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
         setSupportActionBar(toolbar);
 
+        gridMain = findViewById(R.id.gridMoney);
         fab = findViewById(R.id.fabMain);
+        scrollUpMain = findViewById(R.id.scrollUpMain);
         moneyTxt = findViewById(R.id.moneyTxt);
         sharesTxt = findViewById(R.id.sharesTxt);
         sumTxt = findViewById(R.id.sumTxt);
@@ -98,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     toolbarLayout.setElevation(8);
                 }
+
+                if (scroll < gridMain.getHeight()) {
+                    scrollUpMain.setVisibility(View.INVISIBLE);
+                } else {
+                    scrollUpMain.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -106,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 isRefreshing = true;
                 refresh();
+            }
+        });
+
+        scrollUpMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrollMain.scrollTo(0, 0);
             }
         });
 

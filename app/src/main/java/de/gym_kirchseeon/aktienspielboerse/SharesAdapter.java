@@ -32,7 +32,8 @@ public class SharesAdapter extends RecyclerView.Adapter<SharesAdapter.viewHolder
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        JSONObject jObj = jObjList.get(position);
+        //JSONObject jObj = jObjList.get(position);
+        JSONObject jObj = jObjList.get(0);
 
         try {
             String name = jObj.getString("name");
@@ -59,7 +60,11 @@ public class SharesAdapter extends RecyclerView.Adapter<SharesAdapter.viewHolder
 
     @Override
     public int getItemCount() {
-        return jObjList.size();
+        //if (jObjList != null) {
+        //    return jObjList.size();
+        //}
+        //return 0;
+        return 50;
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {

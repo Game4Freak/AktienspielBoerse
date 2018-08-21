@@ -4,6 +4,7 @@
     <string name="sort_by">Sortieren nach&#8230;</string>
     <string name="search">Suchen</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="scrollUp">HOCHSCROLLEN</string>
     <string name="moneyShared">money</string>
     <string name="sharesWorthShared">sharesCurrent</string>
     <integer name="missingShared">0</integer>

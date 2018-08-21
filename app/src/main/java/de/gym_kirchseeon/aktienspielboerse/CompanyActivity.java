@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ public class CompanyActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
+    private LinearLayout backgroundChart;
+    private Button scrollUpCompany;
     private NestedScrollView scrollCompany;
     private SwipeRefreshLayout refreshCompany;
     private TextView worthCompanyTxt;
@@ -51,7 +54,9 @@ public class CompanyActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        scrollUpCompany = findViewById(R.id.scrollUpCompany);
         fab = findViewById(R.id.fabBuy);
+        backgroundChart = findViewById(R.id.backgroundChart);
         toolbarLayout = findViewById(R.id.abCompanyLayout);
         scrollCompany = findViewById(R.id.scrollCompany);
         refreshCompany = findViewById(R.id.refreshCompany);
@@ -83,6 +88,12 @@ public class CompanyActivity extends AppCompatActivity {
                 } else {
                     toolbarLayout.setElevation(8);
                 }
+
+                if (scroll < backgroundChart.getHeight()) {
+                    scrollUpCompany.setVisibility(View.INVISIBLE);
+                } else {
+                    scrollUpCompany.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -91,6 +102,13 @@ public class CompanyActivity extends AppCompatActivity {
             public void onRefresh() {
                 isRefreshing = true;
                 refresh();
+            }
+        });
+
+        scrollUpCompany.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrollCompany.scrollTo(0, 0);
             }
         });
 

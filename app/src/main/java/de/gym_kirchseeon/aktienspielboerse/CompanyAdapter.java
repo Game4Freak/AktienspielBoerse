@@ -32,7 +32,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        JSONObject jObj = jObjList.get(position);
+        //JSONObject jObj = jObjList.get(position);
+        JSONObject jObj = jObjList.get(0);
 
         try {
             String name = jObj.getString("name");
@@ -56,10 +57,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
 
     @Override
     public int getItemCount() {
-        if (jObjList != null) {
-            return jObjList.size();
-        }
-        return 0;
+        //if (jObjList != null) {
+        //    return jObjList.size();
+        //}
+        //return 0;
+        return 50;
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {

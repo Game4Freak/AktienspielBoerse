@@ -24,6 +24,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <Button
+        android:id="@+id/scrollUpCompany"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/wider_fab"
+        android:elevation="10dp"
+        android:text="@string/scrollUp"
+        android:textColor="@color/colorDarkText"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/abCompanyLayout"
+        app:layout_constraintTop_toBottomOf="@+id/abCompanyLayout" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refreshCompany"
         android:layout_width="0dp"
@@ -49,7 +63,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/backGroundGraph"
+                    android:id="@+id/backgroundChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorBackgroundAccent"
@@ -91,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDivider"
-                    app:layout_constraintTop_toBottomOf="@id/backGroundGraph" />
+                    app:layout_constraintTop_toBottomOf="@id/backgroundChart" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -117,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDivider"
-                    app:layout_constraintTop_toBottomOf="@id/backGroundGraph" />
+                    app:layout_constraintTop_toBottomOf="@id/backgroundChart" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
