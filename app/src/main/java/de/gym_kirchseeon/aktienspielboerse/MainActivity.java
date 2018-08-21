@@ -6,16 +6,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private AppBarLayout toolbarLayout;
     private RecyclerView recyclerShares;
     private SharesAdapter sAdapter;
-    private ScrollView scrollMain;
+    private NestedScrollView scrollMain;
+    private SwipeRefreshLayout refreshMain;
     private float money;
     private float sharesWorth;
+    private boolean isRefreshing;
     private JSONObject jObj = new JSONObject();
 
     @Override
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerShares = findViewById(R.id.recyclerShares);
         scrollMain = findViewById(R.id.scrollMain);
         scrollMain.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        refreshMain = findViewById(R.id.refreshMain);
+        isRefreshing = false;
 
         try {
             jObj.put("name", "BMW");
@@ -86,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toolbarLayout.setElevation(0);
         scrollMain.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -99,11 +101,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        refresh(MainActivity.this);
+        refreshMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefreshing = true;
+                refresh();
+            }
+        });
+
+        refresh();
     }
 
-    private void refresh(Context context) {
-        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+    private void refresh() {
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefEdit = sharedPref.edit();
 
         if (sharedPref.getBoolean("isFirstRun", true)) {
@@ -129,6 +139,12 @@ public class MainActivity extends AppCompatActivity {
         moneyTxt.setText(String.format("%.2f€", money));
         sharesTxt.setText(String.format("%.2f€", sharesWorth));
         sumTxt.setText(String.format("%.2f€", money + sharesWorth));
+
+        if (isRefreshing) {
+            Toast.makeText(MainActivity.this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
+            isRefreshing = false;
+            refreshMain.setRefreshing(isRefreshing);
+        }
     }
 
     public void onShareClick(View v) {
@@ -141,16 +157,5 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("worth", 0);
         }
         startActivity(i);
-    }
-
-    public void refresh(MenuItem item) {
-        Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
-        refresh(MainActivity.this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_main, menu);
-        return true;
     }
 }

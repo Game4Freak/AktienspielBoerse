@@ -3,6 +3,8 @@ package de.gym_kirchseeon.aktienspielboerse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.PopupMenu;
@@ -15,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -25,13 +26,15 @@ import java.util.ArrayList;
 
 public class SharesActivity extends AppCompatActivity {
 
+    ArrayList<JSONObject> jObjList = new ArrayList<>();
+    JSONObject jObj = new JSONObject();
     private RecyclerView recyclerCompanies;
     private CompanyAdapter cAdapter;
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
-    private ScrollView scrollShares;
-    ArrayList<JSONObject> jObjList = new ArrayList<>();
-    JSONObject jObj = new JSONObject();
+    private NestedScrollView scrollShares;
+    private SwipeRefreshLayout refreshShares;
+    private boolean isRefreshing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class SharesActivity extends AppCompatActivity {
         recyclerCompanies = findViewById(R.id.recyclerCompanies);
         scrollShares = findViewById(R.id.scrollShares);
         scrollShares.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        refreshShares = findViewById(R.id.refreshShares);
+        isRefreshing = false;
 
         try {
             jObj.put("name", "BMW");
@@ -86,6 +91,16 @@ public class SharesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        refreshShares.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefreshing = true;
+                refresh();
+            }
+        });
+
+        refresh();
     }
 
 
@@ -129,8 +144,13 @@ public class SharesActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void refresh(MenuItem item) {
+    public void refresh() {
         //TODO: Neu laden
-        Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
+
+        if (isRefreshing) {
+            Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
+            isRefreshing = false;
+            refreshShares.setRefreshing(isRefreshing);
+        }
     }
 }

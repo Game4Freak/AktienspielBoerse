@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -13,15 +15,16 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.NumberPicker;
-import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CompanyActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
-    private ScrollView scrollCompany;
+    private NestedScrollView scrollCompany;
+    private SwipeRefreshLayout refreshCompany;
     private TextView worthCompanyTxt;
     private TextView companyNameBuyTxt;
     private TextView companyWorthBuyTxt;
@@ -30,6 +33,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     private String name;
     private double worth;
+    private boolean isRefreshing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,9 @@ public class CompanyActivity extends AppCompatActivity {
         fab = findViewById(R.id.fabBuy);
         toolbarLayout = findViewById(R.id.abCompanyLayout);
         scrollCompany = findViewById(R.id.scrollCompany);
+        refreshCompany = findViewById(R.id.refreshCompany);
         worthCompanyTxt = findViewById(R.id.worthCompanyTxt);
+        isRefreshing = false;
 
         worthCompanyTxt.setText(String.format("%.2f€", worth));
 
@@ -79,6 +85,16 @@ public class CompanyActivity extends AppCompatActivity {
                 }
             }
         });
+
+        refreshCompany.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefreshing = true;
+                refresh();
+            }
+        });
+
+        refresh();
     }
 
     private void buy(final View view, String message) {
@@ -119,5 +135,15 @@ public class CompanyActivity extends AppCompatActivity {
             }
         });
         dialogBuy.show();
+    }
+
+    private void refresh() {
+        //TODO: Neu laden
+
+        if (isRefreshing) {
+            Toast.makeText(this, "Alles neugeladen", Toast.LENGTH_SHORT).show();
+            isRefreshing = false;
+            refreshCompany.setRefreshing(isRefreshing);
+        }
     }
 }
