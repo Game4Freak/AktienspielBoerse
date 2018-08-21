@@ -124,7 +124,13 @@ public class MainActivity extends AppCompatActivity {
         scrollUpMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scrollMain.scrollTo(0, 0);
+                scrollMain.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollMain.fling(0);
+                        scrollMain.smoothScrollTo(0, 0);
+                    }
+                });
             }
         });
 

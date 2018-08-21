@@ -108,7 +108,13 @@ public class CompanyActivity extends AppCompatActivity {
         scrollUpCompany.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scrollCompany.scrollTo(0, 0);
+                scrollCompany.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollCompany.fling(0);
+                        scrollCompany.smoothScrollTo(0, 0);
+                    }
+                });
             }
         });
 
