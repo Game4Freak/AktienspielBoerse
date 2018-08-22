@@ -31,6 +31,9 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+/**
+ * The activity showing all available companies / shares
+ */
 public class SharesActivity extends AppCompatActivity {
 
     private JSONObject jObj = new JSONObject();
@@ -156,6 +159,9 @@ public class SharesActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Shows the sorting dialog
+     */
     public void showPopup(MenuItem item) {
         PopupMenu popup = new PopupMenu(this, findViewById(R.id.sortShares));
         MenuInflater inflater = popup.getMenuInflater();
@@ -163,6 +169,9 @@ public class SharesActivity extends AppCompatActivity {
         popup.show();
     }
 
+    /**
+     * Shows details about the pressed company / share
+     */
     public void onCompanyClick(View v) {
         TextView nameTxt = v.findViewById(R.id.companyNameTxt);
         String name = nameTxt.getText().toString();
@@ -189,6 +198,11 @@ public class SharesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * First Run: Sets money to start with
+     * Refreshes shares and money
+     * non-functional
+     */
     public void refresh() {
         //TODO: Neu laden
 
@@ -199,26 +213,44 @@ public class SharesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sorts alphabetically
+     */
     public void sortAlphabetically(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY);
     }
 
+    /**
+     * Sorts reverse alphabetically
+     */
     public void sortAlphabeticallyReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY_REVERSE);
     }
 
+    /**
+     * Sorts by the highest worth
+     */
     public void sortByWorth(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_WORTH);
     }
 
+    /**
+     * Sorts by the lowest worth
+     */
     public void sortByWorthReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_WORTH_REVERSE);
     }
 
+    /**
+     * Sorts by the highest count of bought shares
+     */
     public void sortByCount(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_COUNT);
     }
 
+    /**
+     * Sorts by the lowest count of bought shares
+     */
     public void sortByCountReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_COUNT_REVERSE);
     }

@@ -22,6 +22,9 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The adapter to load shares into a Recycler
+ */
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHolder> implements Filterable {
 
     public final static int SORT_ALPHABETICALLY = 0;
@@ -44,6 +47,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
     private JSONArray jObjArray;
     private int sorting;
     private int context;
+
 
     public CompanyAdapter(Context context, int contextInt, JSONObject jObj) {
         this.context = contextInt;
@@ -170,6 +174,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         return filter;
     }
 
+    /**
+     * Sorts the Recycler
+     *
+     * @param sorting by what to sort
+     */
     public void sort(int sorting) {
         this.sorting = sorting;
         if (jObjList.size() > 1) {
@@ -200,6 +209,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         notifyDataSetChanged();
     }
 
+    /**
+     * Sorts alphabetically
+     */
     private void sortAlphabetically() {
         Collections.sort(jObjList, new Comparator<JSONObject>() {
             @Override
@@ -214,10 +226,16 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         });
     }
 
+    /**
+     * Sorts reverse alphabetically
+     */
     private void sortAlphabeticallyReverse() {
         Collections.reverse(jObjList);
     }
 
+    /**
+     * Sorts by the highest worth
+     */
     private void sortByWorthReverse() {
         Collections.sort(jObjList, new Comparator<JSONObject>() {
             @Override
@@ -232,16 +250,25 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         });
     }
 
+    /**
+     * Sorts by the lowest worth
+     */
     private void sortByWorth() {
         sortByWorthReverse();
         Collections.reverse(jObjList);
     }
 
+    /**
+     * Sorts by the highest count
+     */
     private void sortByCount() {
         sortByCountReverse();
         Collections.reverse(jObjList);
     }
 
+    /**
+     * Sorts by the lowest count
+     */
     private void sortByCountReverse() {
         Collections.sort(jObjList, new Comparator<JSONObject>() {
             @Override
@@ -256,6 +283,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         });
     }
 
+    /**
+     * Filter to search companies in the Recycler
+     */
     private static class CustomFilter extends Filter {
 
         private final CompanyAdapter adapter;

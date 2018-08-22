@@ -24,6 +24,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * The activity showing details about a company
+ */
 public class CompanyActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -157,6 +160,11 @@ public class CompanyActivity extends AppCompatActivity {
         refresh();
     }
 
+    /**
+     * Shows a Snackbar after buying shares
+     *
+     * @param message The message being shown in the Snackbar
+     */
     private void buy(final View view, String message) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Rückgängig", new View.OnClickListener() {
@@ -168,6 +176,9 @@ public class CompanyActivity extends AppCompatActivity {
                 }).show();
     }
 
+    /**
+     * Shows a popup with a NumberPicker to buy shares
+     */
     private void showBuyDialog() {
         AlertDialog.Builder dialogBuyBuilder = new AlertDialog.Builder(this);
         LayoutInflater lInflater = getLayoutInflater();
@@ -197,6 +208,10 @@ public class CompanyActivity extends AppCompatActivity {
         dialogBuy.show();
     }
 
+    /**
+     * Refreshes shares
+     * non-functional
+     */
     private void refresh() {
         //TODO: Neu laden
 
