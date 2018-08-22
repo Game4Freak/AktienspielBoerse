@@ -10,8 +10,13 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -20,14 +25,17 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<JSONObject> jObjList = new ArrayList<>();
+    private JSONObject jObj = new JSONObject();
     private GridLayout gridMain;
     private FloatingActionButton fab;
     private Button scrollUpMain;
@@ -37,13 +45,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private RecyclerView recyclerShares;
-    private SharesAdapter sAdapter;
+    private CompanyAdapter cAdapter;
     private NestedScrollView scrollMain;
     private SwipeRefreshLayout refreshMain;
     private float money;
     private float sharesWorth;
     private boolean isRefreshing;
-    private JSONObject jObj = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +73,36 @@ public class MainActivity extends AppCompatActivity {
         refreshMain = findViewById(R.id.refreshMain);
         isRefreshing = false;
 
+        JSONArray jA = new JSONArray();
+        JSONObject jObjTemp = new JSONObject();
         try {
-            jObj.put("name", "BMW");
-            jObj.put("worth", 143.23);
-            jObj.put("count", 5);
-            jObj.put("change", -1.5);
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 94.47);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 8);
+            jA.put(jObjTemp);
 
-            jObjList.add(jObj);
+            jObjTemp = new JSONObject();
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 238.24);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 5);
+            jA.put(jObjTemp);
+
+            jObjTemp = new JSONObject();
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 147.23);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 26);
+            jA.put(jObjTemp);
+
+            jObj.put(getResources().getString(R.string.company), jA);
         } catch (JSONException e) {
+            Log.e("JSONException", e.getMessage());
         }
 
-        sAdapter = new SharesAdapter(jObjList);
+        cAdapter = new CompanyAdapter(this, CompanyAdapter.MAIN_ACTIVITY, jObj);
+
         RecyclerView.LayoutManager cLayoutManager = new CustomGridLayoutManager(getApplicationContext()) {
             @Override
             public boolean canScrollVertically() {
@@ -85,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         };
         recyclerShares.setLayoutManager(cLayoutManager);
         recyclerShares.setItemAnimator(new DefaultItemAnimator());
-        recyclerShares.setAdapter(sAdapter);
+        recyclerShares.setAdapter(cAdapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,12 +175,15 @@ public class MainActivity extends AppCompatActivity {
 
         float shareWorth = 0;
 
-        for (int i = 0; i < jObjList.size(); i++) {
-            try {
-                shareWorth += jObjList.get(i).getDouble("worth") * jObjList.get(i).getDouble("count");
-            } catch (JSONException e) {
+        try {
+            JSONArray shares = jObj.getJSONArray(getResources().getString(R.string.company));
+            for (int i = 0; i < shares.length(); i++) {
+                shareWorth += shares.getJSONObject(i).getDouble("worth") * shares.getJSONObject(i).getDouble("count");
             }
+        } catch (JSONException e) {
+            Log.e("JSONException", e.getMessage());
         }
+
         sharedPrefEdit.putFloat(getString(R.string.sharesWorthShared), shareWorth);
         sharedPrefEdit.commit();
 
@@ -172,15 +201,66 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void showPopup(MenuItem item) {
+        PopupMenu popup = new PopupMenu(this, findViewById(R.id.sortSharesMain));
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.sort_by, popup.getMenu());
+        popup.show();
+    }
+
     public void onShareClick(View v) {
-        Intent i = new Intent(MainActivity.this, CompanyActivity.class);
+        TextView nameTxt = v.findViewById(R.id.companySharesNameTxt);
+        String name = nameTxt.getText().toString();
+
+        TextView worthTxt = v.findViewById(R.id.shareMultiplicationTxt);
+        String worthStr = worthTxt.getText().toString().split(" x ")[1];
+        NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+        double worth = 0;
         try {
-            i.putExtra("name", jObj.getString("name"));
-            i.putExtra("worth", jObj.getDouble("worth"));
-        } catch (JSONException e) {
-            i.putExtra("name", "Fehler");
-            i.putExtra("worth", 0);
+            Number number = format.parse(worthStr);
+            worth = number.doubleValue();
+        } catch (ParseException e) {
+            Log.e("ParseException", e.getMessage());
         }
-        startActivity(i);
+
+        JSONObject company = cAdapter.getCompany(name, worth);
+
+        if (company != null) {
+            Intent i = new Intent(MainActivity.this, CompanyActivity.class);
+            i.putExtra("company", company.toString());
+            startActivity(i);
+        } else {
+            Log.e("CompanyError", "Company is null");
+        }
+    }
+
+    public void sortAlphabetically(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY);
+    }
+
+    public void sortAlphabeticallyReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY_REVERSE);
+    }
+
+    public void sortByWorth(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_WORTH);
+    }
+
+    public void sortByWorthReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_WORTH_REVERSE);
+    }
+
+    public void sortByCount(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_COUNT);
+    }
+
+    public void sortByCountReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_COUNT_REVERSE);
     }
 }

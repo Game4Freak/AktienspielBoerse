@@ -2,6 +2,7 @@ package de.gym_kirchseeon.aktienspielboerse;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -10,32 +11,46 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CompanyActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
-    private LinearLayout backgroundChart;
+    private GridLayout backgroundChart;
     private Button scrollUpCompany;
     private NestedScrollView scrollCompany;
     private SwipeRefreshLayout refreshCompany;
     private TextView worthCompanyTxt;
+    private TextView countCompanyTxt;
+    private TextView changeCompanyTxt;
     private TextView companyNameBuyTxt;
     private TextView companyWorthBuyTxt;
     private NumberPicker buyCountPicker;
     private Button buyBtn;
 
+    private String keyName;
+    private String keyWorth;
+    private String keyChange;
+    private String keyCount;
+
+    private JSONObject company;
     private String name;
     private double worth;
+    private double change;
+    private int count;
     private boolean isRefreshing;
 
     @Override
@@ -43,9 +58,21 @@ public class CompanyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
 
-        Intent i = getIntent();
-        name = i.getStringExtra("name");
-        worth = i.getDoubleExtra("worth", 0);
+        keyName = getResources().getString(R.string.nameCompany);
+        keyWorth = getResources().getString(R.string.worthCompany);
+        keyChange = getResources().getString(R.string.changeCompany);
+        keyCount = getResources().getString(R.string.countCompany);
+
+        try {
+            Intent i = getIntent();
+            company = new JSONObject(i.getStringExtra("company"));
+            name = company.getString(keyName);
+            worth = company.getDouble(keyWorth);
+            change = company.getDouble(keyChange);
+            count = company.getInt(keyCount);
+        } catch (JSONException e) {
+            Log.e("JSONException", e.getMessage());
+        }
 
         toolbar = findViewById(R.id.abCompany);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
@@ -61,9 +88,18 @@ public class CompanyActivity extends AppCompatActivity {
         scrollCompany = findViewById(R.id.scrollCompany);
         refreshCompany = findViewById(R.id.refreshCompany);
         worthCompanyTxt = findViewById(R.id.worthCompanyTxt);
+        countCompanyTxt = findViewById(R.id.countCompanyTxt);
+        changeCompanyTxt = findViewById(R.id.changeCompanyTxt);
         isRefreshing = false;
 
         worthCompanyTxt.setText(String.format("%.2f€", worth));
+        countCompanyTxt.setText(String.format("%d", count));
+        changeCompanyTxt.setText(String.format("%+.1f%%", change));
+        if (change > 0) {
+            changeCompanyTxt.setTextColor(Color.parseColor("#00c853"));
+        } else if (change < 0) {
+            changeCompanyTxt.setTextColor(Color.parseColor("#d50000"));
+        }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

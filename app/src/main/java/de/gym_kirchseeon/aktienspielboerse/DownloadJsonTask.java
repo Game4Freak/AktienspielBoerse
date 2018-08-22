@@ -1,6 +1,7 @@
 package de.gym_kirchseeon.aktienspielboerse;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ public class DownloadJsonTask extends AsyncTask<String, Void, JSONObject> {
 
             return result;
         } catch (IOException | JSONException e) {
-            e.printStackTrace();
+            Log.e("JSONException", e.getMessage());
         }
         return null; //TODO: ERSETZEN! nur für Kompilieren drinnen
     }

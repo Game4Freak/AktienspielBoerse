@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">Aktienspiel Börse</string>
     <string name="preference_file_key">de.gym_kirchseeon.aktienspielboerse.sharedPreferences</string>
+
     <string name="sort_by">Sortieren nach&#8230;</string>
     <string name="search">Suchen</string>
     <string name="refresh">Aktualisieren</string>
-    <string name="scrollUp">HOCHSCROLLEN</string>
+    <string name="scrollUp">&#8593; HOCHSCROLLEN</string>
+
     <string name="moneyShared">money</string>
     <string name="sharesWorthShared">sharesCurrent</string>
+
+    <string name="nameCompany">name</string>
+    <string name="worthCompany">worth</string>
+    <string name="changeCompany">change</string>
+    <string name="countCompany">count</string>
+    <string name="company">company</string>
+
     <integer name="missingShared">0</integer>
     <string name="title_activity_company">CompanyActivity</string>
     <string name="large_text">

@@ -5,15 +5,31 @@
     <item
         android:id="@+id/a_z"
         android:title="A - Z"
+        android:onClick="sortAlphabetically"
         app:showAsAction="never" />
     <item
         android:id="@+id/z_a"
         android:title="Z - A"
+        android:onClick="sortAlphabeticallyReverse"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/countAscending"
+        android:onClick="sortByCount"
+        android:title="höchster Anzahl"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/countDescending"
+        android:onClick="sortByCountReverse"
+        android:title="niedrigster Anzahl"
         app:showAsAction="never" />
     <item
         android:id="@+id/worthAscending"
-        android:title="Nach hächstem Wert" />
+        android:onClick="sortByWorth"
+        android:title="höchster Wert"
+        app:showAsAction="never" />
     <item
         android:id="@+id/worthDescending"
-        android:title="Nach niedrigstem Wert" />
+        android:onClick="sortByWorthReverse"
+        android:title="niedrigster Wert"
+        app:showAsAction="never" />
 </menu>

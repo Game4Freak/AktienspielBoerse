@@ -3,6 +3,7 @@ package de.gym_kirchseeon.aktienspielboerse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,23 +12,28 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class SharesActivity extends AppCompatActivity {
 
-    ArrayList<JSONObject> jObjList = new ArrayList<>();
-    JSONObject jObj = new JSONObject();
+    private JSONObject jObj = new JSONObject();
     private RecyclerView recyclerCompanies;
     private CompanyAdapter cAdapter;
     private Toolbar toolbar;
@@ -60,15 +66,35 @@ public class SharesActivity extends AppCompatActivity {
         refreshShares = findViewById(R.id.refreshShares);
         isRefreshing = false;
 
+        JSONArray jA = new JSONArray();
+        JSONObject jObjTemp = new JSONObject();
         try {
-            jObj.put("name", "BMW");
-            jObj.put("worth", 143.23);
-            jObj.put("change", -1.5);
-            jObjList.add(jObj);
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 94.47);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 8);
+            jA.put(jObjTemp);
+
+            jObjTemp = new JSONObject();
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 238.24);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 5);
+            jA.put(jObjTemp);
+
+            jObjTemp = new JSONObject();
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 147.23);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 26);
+            jA.put(jObjTemp);
+
+            jObj.put(getResources().getString(R.string.company), jA);
         } catch (JSONException e) {
+            Log.e("JSONException", e.getMessage());
         }
 
-        cAdapter = new CompanyAdapter(jObjList);
+        cAdapter = new CompanyAdapter(this, CompanyAdapter.SHARES_ACTIVITY, jObj);
 
         RecyclerView.LayoutManager cLayoutManager = new CustomGridLayoutManager(getApplicationContext()) {
             @Override
@@ -100,6 +126,7 @@ public class SharesActivity extends AppCompatActivity {
             }
         });
 
+
         refresh();
     }
 
@@ -117,10 +144,14 @@ public class SharesActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String text) {
+                cAdapter.getFilter().filter(text);
                 return false;
             }
         });
+
+        ImageView searchIcon = searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -133,15 +164,29 @@ public class SharesActivity extends AppCompatActivity {
     }
 
     public void onCompanyClick(View v) {
-        Intent i = new Intent(SharesActivity.this, CompanyActivity.class);
+        TextView nameTxt = v.findViewById(R.id.companyNameTxt);
+        String name = nameTxt.getText().toString();
+
+        TextView worthTxt = v.findViewById(R.id.shareWorthTxt);
+        String worthStr = worthTxt.getText().toString().split("€")[0];
+        NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+        double worth = 0;
         try {
-            i.putExtra("name", jObj.getString("name"));
-            i.putExtra("worth", jObj.getDouble("worth"));
-        } catch (JSONException e) {
-            i.putExtra("name", "Fehler");
-            i.putExtra("worth", 0);
+            Number number = format.parse(worthStr);
+            worth = number.doubleValue();
+        } catch (ParseException e) {
+            Log.e("ParseException", e.getMessage());
         }
-        startActivity(i);
+
+        JSONObject company = cAdapter.getCompany(name, worth);
+
+        if (company != null) {
+            Intent i = new Intent(SharesActivity.this, CompanyActivity.class);
+            i.putExtra("company", company.toString());
+            startActivity(i);
+        } else {
+            Log.e("CompanyError", "Company is null");
+        }
     }
 
     public void refresh() {
@@ -152,5 +197,29 @@ public class SharesActivity extends AppCompatActivity {
             isRefreshing = false;
             refreshShares.setRefreshing(isRefreshing);
         }
+    }
+
+    public void sortAlphabetically(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY);
+    }
+
+    public void sortAlphabeticallyReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_ALPHABETICALLY_REVERSE);
+    }
+
+    public void sortByWorth(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_WORTH);
+    }
+
+    public void sortByWorthReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_WORTH_REVERSE);
+    }
+
+    public void sortByCount(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_COUNT);
+    }
+
+    public void sortByCountReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_COUNT_REVERSE);
     }
 }

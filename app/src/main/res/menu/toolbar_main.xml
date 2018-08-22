@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sortSharesMain"
+        android:icon="@drawable/ic_sort"
+        android:onClick="showPopup"
+        android:title="@string/sort_by"
+        app:showAsAction="ifRoom" />
+
+</menu>
