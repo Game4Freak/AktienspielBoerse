@@ -92,6 +92,13 @@ public class SharesActivity extends AppCompatActivity {
             jObjTemp.put(getResources().getString(R.string.countCompany), 26);
             jA.put(jObjTemp);
 
+            jObjTemp = new JSONObject();
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "VW AG");
+            jObjTemp.put(getResources().getString(R.string.worthCompany), 152.98);
+            jObjTemp.put(getResources().getString(R.string.changeCompany), -3.1);
+            jObjTemp.put(getResources().getString(R.string.countCompany), 0);
+            jA.put(jObjTemp);
+
             jObj.put(getResources().getString(R.string.company), jA);
         } catch (JSONException e) {
             Log.e("JSONException", e.getMessage());

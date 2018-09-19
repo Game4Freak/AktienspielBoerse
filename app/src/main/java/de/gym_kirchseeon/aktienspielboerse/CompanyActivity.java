@@ -32,6 +32,9 @@ public class CompanyActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
+    private FloatingActionButton fabCancel;
+    private FloatingActionButton fabBuy;
+    private FloatingActionButton fabSell;
     private GridLayout backgroundChart;
     private Button scrollUpCompany;
     private NestedScrollView scrollCompany;
@@ -85,7 +88,10 @@ public class CompanyActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         scrollUpCompany = findViewById(R.id.scrollUpCompany);
-        fab = findViewById(R.id.fabBuy);
+        fab = findViewById(R.id.fabShop);
+        fabCancel = findViewById(R.id.fabCancel);
+        fabBuy = findViewById(R.id.fabBuy);
+        fabSell = findViewById(R.id.fabSell);
         backgroundChart = findViewById(R.id.backgroundChart);
         toolbarLayout = findViewById(R.id.abCompanyLayout);
         scrollCompany = findViewById(R.id.scrollCompany);
@@ -114,7 +120,40 @@ public class CompanyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fab.setVisibility(View.INVISIBLE);
+                fabCancel.setVisibility(View.VISIBLE);
+                fabCancel.bringToFront();
+
+                fabBuy.setVisibility(View.VISIBLE);
+                if (count != 0) {
+                    fabSell.setVisibility(View.VISIBLE);
+                }
+
+                fabBuy.animate().setDuration(100).translationY(-getResources().getDimensionPixelOffset(R.dimen.fab_buy));
+                fabSell.animate().setDuration(200).translationY(-getResources().getDimensionPixelOffset(R.dimen.fab_sell));
+            }
+        });
+
+        fabCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
+
+        fabBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 showBuyDialog();
+                cancel();
+            }
+        });
+
+        fabSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSellDialog();
+                cancel();
             }
         });
 
@@ -160,26 +199,53 @@ public class CompanyActivity extends AppCompatActivity {
         refresh();
     }
 
+    private void buy(View view, String message) {
+        snack(view, message, true);
+    }
+
+    private void sell(View view, String message) {
+        snack(view, message, false);
+    }
+
     /**
      * Shows a Snackbar after buying shares
      *
      * @param message The message being shown in the Snackbar
      */
-    private void buy(final View view, String message) {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setAction("Rückgängig", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
-                        //TODO: Rückgängig
-                    }
-                }).show();
+    private void snack(final View view, String message, boolean buy) {
+        if (buy) {
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                    .setAction("Rückgängig", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
+                            //TODO: Rückgängig
+                        }
+                    }).show();
+        } else {
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                    .setAction("Rückgängig", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
+                            //TODO: Rückgängig
+                        }
+                    }).show();
+        }
+    }
+
+    private void showBuyDialog() {
+        showDialog(true);
+    }
+
+    private void showSellDialog() {
+        showDialog(false);
     }
 
     /**
      * Shows a popup with a NumberPicker to buy shares
      */
-    private void showBuyDialog() {
+    private void showDialog(boolean buy) {
         AlertDialog.Builder dialogBuyBuilder = new AlertDialog.Builder(this);
         LayoutInflater lInflater = getLayoutInflater();
         final View layout = lInflater.inflate(R.layout.buy_popup, null);
@@ -196,15 +262,31 @@ public class CompanyActivity extends AppCompatActivity {
         buyCountPicker.setMinValue(1);
         buyCountPicker.setMaxValue(100);
 
-        buyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int countBuy = buyCountPicker.getValue();
-                //TODO: Kaufen
-                dialogBuy.dismiss();
-                buy(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
-            }
-        });
+        if (buy) {
+            buyBtn.setText("Kaufen");
+
+            buyBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int countBuy = buyCountPicker.getValue();
+                    //TODO: Kaufen
+                    dialogBuy.dismiss();
+                    buy(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
+                }
+            });
+        } else {
+            buyBtn.setText("Verkaufen");
+
+            buyBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int countSell = buyCountPicker.getValue();
+                    //TODO: Verkaufen
+                    dialogBuy.dismiss();
+                    sell(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ verkauft", countSell, name, worth * countSell));
+                }
+            });
+        }
         dialogBuy.show();
     }
 
@@ -220,5 +302,24 @@ public class CompanyActivity extends AppCompatActivity {
             isRefreshing = false;
             refreshCompany.setRefreshing(isRefreshing);
         }
+    }
+
+    private void cancel() {
+        fab.setVisibility(View.VISIBLE);
+        fab.bringToFront();
+
+        fabBuy.animate().setDuration(100).translationY(0f);
+        fabSell.animate().setDuration(200).translationY(0f)
+                .withEndAction(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fabBuy.setVisibility(View.INVISIBLE);
+                                fabSell.setVisibility(View.INVISIBLE);
+
+                                fabCancel.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                );
     }
 }

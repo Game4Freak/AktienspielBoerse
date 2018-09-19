@@ -12,4 +12,7 @@
     <dimen name="recycler_title_bottom_margin">8dp</dimen>
     <dimen name="graph_vertical_margin">30dp</dimen>
     <dimen name="graph_horizontal_margin">30dp</dimen>
+
+    <dimen name="fab_buy">60dp</dimen>
+    <dimen name="fab_sell">120dp</dimen>
 </resources>
