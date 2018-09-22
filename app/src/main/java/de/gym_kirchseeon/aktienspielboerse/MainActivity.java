@@ -80,21 +80,21 @@ public class MainActivity extends AppCompatActivity {
         JSONObject jObjTemp = new JSONObject();
         try {
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 94.47);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 94.47);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 8);
             jA.put(jObjTemp);
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 238.24);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 238.24);
             jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
             jObjTemp.put(getResources().getString(R.string.countCompany), 5);
             jA.put(jObjTemp);
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 147.23);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 147.23);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 26);
             jA.put(jObjTemp);
@@ -163,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sortBySumWorth(null);
+
         refresh();
     }
 
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPopup(MenuItem item) {
         PopupMenu popup = new PopupMenu(this, findViewById(R.id.sortSharesMain));
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.sort_by, popup.getMenu());
+        inflater.inflate(R.menu.sort_by_extended, popup.getMenu());
         popup.show();
     }
 
@@ -280,6 +282,20 @@ public class MainActivity extends AppCompatActivity {
      */
     public void sortByWorthReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_WORTH_REVERSE);
+    }
+
+    /**
+     * Sorts by the highest worth
+     */
+    public void sortBySumWorth(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_SUM_WORTH);
+    }
+
+    /**
+     * Sorts by the lowest worth
+     */
+    public void sortBySumWorthReverse(MenuItem item) {
+        cAdapter.sort(CompanyAdapter.SORT_BY_SUM_WORTH_REVERSE);
     }
 
     /**

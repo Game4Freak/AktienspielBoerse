@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -15,14 +14,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
 
 /**
  * The activity showing details about a company
@@ -30,11 +38,12 @@ import org.json.JSONObject;
 public class CompanyActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private AppBarLayout toolbarLayout;
+    //private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
     private FloatingActionButton fabCancel;
     private FloatingActionButton fabBuy;
     private FloatingActionButton fabSell;
+    private Spinner spinnerScale;
     private GridLayout backgroundChart;
     private Button scrollUpCompany;
     private NestedScrollView scrollCompany;
@@ -46,6 +55,7 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView companyWorthBuyTxt;
     private NumberPicker buyCountPicker;
     private Button buyBtn;
+    private GraphView graphView;
 
     private String keyName;
     private String keyWorth;
@@ -58,6 +68,7 @@ public class CompanyActivity extends AppCompatActivity {
     private double change;
     private int count;
     private boolean isRefreshing;
+    private LineGraphSeries<DataPoint> graphSeries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +76,7 @@ public class CompanyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_company);
 
         keyName = getResources().getString(R.string.nameCompany);
-        keyWorth = getResources().getString(R.string.worthCompany);
+        keyWorth = getResources().getString(R.string.currentWorthCompany);
         keyChange = getResources().getString(R.string.changeCompany);
         keyCount = getResources().getString(R.string.countCompany);
 
@@ -93,12 +104,15 @@ public class CompanyActivity extends AppCompatActivity {
         fabBuy = findViewById(R.id.fabBuy);
         fabSell = findViewById(R.id.fabSell);
         backgroundChart = findViewById(R.id.backgroundChart);
-        toolbarLayout = findViewById(R.id.abCompanyLayout);
+        //toolbarLayout = findViewById(R.id.abCompanyLayout);
+        spinnerScale = findViewById(R.id.spinnerScale);
         scrollCompany = findViewById(R.id.scrollCompany);
         refreshCompany = findViewById(R.id.refreshCompany);
         worthCompanyTxt = findViewById(R.id.worthCompanyTxt);
         countCompanyTxt = findViewById(R.id.countCompanyTxt);
         changeCompanyTxt = findViewById(R.id.changeCompanyTxt);
+        graphView = findViewById(R.id.graphShare);
+        setupGraph(0, 99);
         isRefreshing = false;
 
         worthCompanyTxt.setText(String.format("%.2f€", worth));
@@ -161,11 +175,11 @@ public class CompanyActivity extends AppCompatActivity {
             @Override
             public void onScrollChanged() {
                 int scroll = scrollCompany.getScrollY();
-                if (scroll == 0) {
+                /*if (scroll == 0) {
                     toolbarLayout.setElevation(0);
                 } else {
                     toolbarLayout.setElevation(8);
-                }
+                }*/
 
                 if (scroll < backgroundChart.getHeight()) {
                     scrollUpCompany.setVisibility(View.INVISIBLE);
@@ -196,15 +210,52 @@ public class CompanyActivity extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.scale_spinner_array, R.layout.spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerScale.setAdapter(spinnerAdapter);
+        spinnerScale.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Richtige Werte nutzen!
+                int index = parent.getSelectedItemPosition();
+                switch (index) {
+                    case 0:
+                        setupGraph(0, 99);
+                        break;
+
+                    case 1:
+                        setupGraph(25, 99);
+                        break;
+
+                    case 2:
+                        setupGraph(50, 99);
+                        break;
+
+                    case 3:
+                        setupGraph(75, 99);
+                        break;
+
+                    case 4:
+                        setupGraph(98, 99);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         refresh();
     }
 
-    private void buy(View view, String message) {
-        snack(view, message, true);
+    private void buy(String message) {
+        snack(message, true);
     }
 
-    private void sell(View view, String message) {
-        snack(view, message, false);
+    private void sell(String message) {
+        snack(message, false);
     }
 
     /**
@@ -212,22 +263,22 @@ public class CompanyActivity extends AppCompatActivity {
      *
      * @param message The message being shown in the Snackbar
      */
-    private void snack(final View view, String message, boolean buy) {
+    private void snack(String message, boolean buy) {
         if (buy) {
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+            Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
                     .setAction("Rückgängig", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(fab, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
                             //TODO: Rückgängig
                         }
                     }).show();
         } else {
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+            Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
                     .setAction("Rückgängig", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(view, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(fab, "Rückgängig gemacht", Snackbar.LENGTH_SHORT).show();
                             //TODO: Rückgängig
                         }
                     }).show();
@@ -271,7 +322,7 @@ public class CompanyActivity extends AppCompatActivity {
                     int countBuy = buyCountPicker.getValue();
                     //TODO: Kaufen
                     dialogBuy.dismiss();
-                    buy(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
+                    buy(String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
                 }
             });
         } else {
@@ -283,7 +334,7 @@ public class CompanyActivity extends AppCompatActivity {
                     int countSell = buyCountPicker.getValue();
                     //TODO: Verkaufen
                     dialogBuy.dismiss();
-                    sell(findViewById(R.id.fabBuy), String.format("Du hast %d Aktien von %s für %.2f€ verkauft", countSell, name, worth * countSell));
+                    sell(String.format("Du hast %d Aktien von %s für %.2f€ verkauft", countSell, name, worth * countSell));
                 }
             });
         }
@@ -321,5 +372,43 @@ public class CompanyActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    private void setupGraph(int minX, int maxX) {
+        graphView.removeAllSeries();
+
+        if(graphSeries == null) {
+            Random r = new Random();
+            double worth = 200;
+
+            DataPoint[] dataPoints = new DataPoint[100];
+            for (int i = 0; i < 100; i++) {
+                worth = r.nextGaussian() * 20 + worth;
+                if (worth <= 0) {
+                    worth = -(worth + 1);
+                }
+                dataPoints[i] = new DataPoint(i, worth);
+            }
+
+            graphSeries = new LineGraphSeries<>(dataPoints);
+
+            double max = dataPoints[0].getY();
+            for (int i = 1; i < dataPoints.length; i++) {
+                if (dataPoints[i].getY() > max) {
+                    max = dataPoints[i].getY();
+                }
+            }
+
+
+            graphView.getViewport().setYAxisBoundsManual(true);
+            graphView.getViewport().setMinY(0);
+            graphView.getViewport().setMaxY(max + 50);
+        }
+
+        graphView.getViewport().setXAxisBoundsManual(true);
+        graphView.getViewport().setMinX(minX);
+        graphView.getViewport().setMaxX(maxX);
+
+        graphView.addSeries(graphSeries);
     }
 }

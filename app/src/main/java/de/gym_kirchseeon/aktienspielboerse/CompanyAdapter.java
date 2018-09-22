@@ -33,6 +33,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
     public final static int SORT_BY_WORTH_REVERSE = 3;
     public final static int SORT_BY_COUNT = 4;
     public final static int SORT_BY_COUNT_REVERSE = 5;
+    public final static int SORT_BY_SUM_WORTH = 6;
+    public final static int SORT_BY_SUM_WORTH_REVERSE = 7;
 
     public final static int MAIN_ACTIVITY = 0;
     public final static int SHARES_ACTIVITY = 1;
@@ -53,7 +55,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         this.context = contextInt;
 
         keyName = context.getResources().getString(R.string.nameCompany);
-        keyWorth = context.getResources().getString(R.string.worthCompany);
+        keyWorth = context.getResources().getString(R.string.currentWorthCompany);
         keyChange = context.getResources().getString(R.string.changeCompany);
         keyCount = context.getResources().getString(R.string.countCompany);
         keyCompany = context.getResources().getString(R.string.company);
@@ -186,15 +188,12 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
                 case SORT_ALPHABETICALLY:
                     sortAlphabetically();
                     break;
-
                 case SORT_ALPHABETICALLY_REVERSE:
                     sortAlphabeticallyReverse();
                     break;
-
                 case SORT_BY_WORTH:
                     sortByWorth();
                     break;
-
                 case SORT_BY_WORTH_REVERSE:
                     sortByWorthReverse();
                     break;
@@ -203,6 +202,12 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
                     break;
                 case SORT_BY_COUNT_REVERSE:
                     sortByCountReverse();
+                    break;
+                case SORT_BY_SUM_WORTH:
+                    sortBySumWorth();
+                    break;
+                case SORT_BY_SUM_WORTH_REVERSE:
+                    sortBySumWorthReverse();
                     break;
             }
         }
@@ -234,7 +239,15 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
     }
 
     /**
-     * Sorts by the highest worth
+     * Sorts by the lowest single worth
+     */
+    private void sortByWorth() {
+        sortByWorthReverse();
+        Collections.reverse(jObjList);
+    }
+
+    /**
+     * Sorts by the highest single worth
      */
     private void sortByWorthReverse() {
         Collections.sort(jObjList, new Comparator<JSONObject>() {
@@ -251,11 +264,28 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
     }
 
     /**
-     * Sorts by the lowest worth
+     * Sorts by the highest sum worth
      */
-    private void sortByWorth() {
-        sortByWorthReverse();
+    private void sortBySumWorth() {
+        sortBySumWorthReverse();
         Collections.reverse(jObjList);
+    }
+
+    /**
+     * Sorts by the lowest sum worth
+     */
+    private void sortBySumWorthReverse() {
+        Collections.sort(jObjList, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject j1, JSONObject j2) {
+                try {
+                    return Double.compare(j1.getDouble(keyWorth) * j1.getDouble(keyCount), j2.getDouble(keyWorth) * j2.getDouble(keyCount));
+                } catch (JSONException e) {
+                    Log.e("JSONException", e.getMessage());
+                    return 0;
+                }
+            }
+        });
     }
 
     /**

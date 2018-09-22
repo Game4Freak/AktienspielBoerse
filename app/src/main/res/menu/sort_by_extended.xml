@@ -23,13 +23,23 @@
         android:title="niedrigste Anzahl"
         app:showAsAction="never" />
     <item
-        android:id="@+id/worthAscending"
-        android:onClick="sortByWorth"
-        android:title="höchster Wert"
+        android:id="@+id/sumWorthAscending"
+        android:onClick="sortBySumWorth"
+        android:title="höchster Gesamtwert"
         app:showAsAction="never" />
     <item
-        android:id="@+id/worthDescending"
+        android:id="@+id/sumWorthorthDescending"
+        android:onClick="sortBySumWorthReverse"
+        android:title="niedrigster Gesamtwert"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/worthAscending"
+        android:onClick="sortByWorth"
+        android:title="höchster Einzelwert"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/worthorthDescending"
         android:onClick="sortByWorthReverse"
-        android:title="niedrigster Wert"
+        android:title="niedrigster Einzelwert"
         app:showAsAction="never" />
 </menu>

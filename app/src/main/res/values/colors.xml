@@ -6,6 +6,7 @@
     <color name="colorAccent">#66bb6a</color>
     <color name="colorBackground">#ffffff</color>
     <color name="colorBackgroundAccent">#f8f9fa</color>
+    <color name="colorStatusBar">#e9eaee</color>
     <color name="colorDivider">#e0e0e0</color>
     <color name="colorDarkText">#212121</color>
     <color name="colorLightText">#80868b</color>

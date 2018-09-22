@@ -73,28 +73,28 @@ public class SharesActivity extends AppCompatActivity {
         JSONObject jObjTemp = new JSONObject();
         try {
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 94.47);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 94.47);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 8);
             jA.put(jObjTemp);
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 238.24);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 238.24);
             jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
             jObjTemp.put(getResources().getString(R.string.countCompany), 5);
             jA.put(jObjTemp);
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 147.23);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 147.23);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 26);
             jA.put(jObjTemp);
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "VW AG");
-            jObjTemp.put(getResources().getString(R.string.worthCompany), 152.98);
+            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 152.98);
             jObjTemp.put(getResources().getString(R.string.changeCompany), -3.1);
             jObjTemp.put(getResources().getString(R.string.countCompany), 0);
             jA.put(jObjTemp);

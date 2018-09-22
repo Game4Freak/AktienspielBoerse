@@ -12,6 +12,7 @@
 
     <string name="nameCompany">name</string>
     <string name="worthCompany">worth</string>
+    <string name="currentWorthCompany">currentWorth</string>
     <string name="changeCompany">change</string>
     <string name="countCompany">count</string>
     <string name="company">company</string>
