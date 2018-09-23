@@ -80,7 +80,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
         for (int i = 0; i < jObjArray.length(); i++) {
             try {
                 JSONObject testFor = jObjArray.getJSONObject(i);
-                if (testFor.getString(keyName).equals(name) && testFor.getDouble(keyWorth) == worth) {
+                if (testFor.getString(keyName).equals(name) && Math.abs(testFor.getDouble(keyWorth) - worth) < 0.01) {
                     return testFor;
                 }
             } catch (JSONException e) {
@@ -144,7 +144,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
                 holder.companyNameTxt.setText(name);
                 holder.shareWorthTxt.setText(String.format("%.2f€", worth));
                 holder.shareCountTxt.setText(String.format("%d", count));
-                holder.changeCompaniesTxt.setText(String.format("%.1f%%", change));
+                holder.changeCompaniesTxt.setText(String.format("%+.1f%%", change));
                 if (change > 0) {
                     holder.changeCompaniesTxt.setTextColor(Color.parseColor("#00c853"));
                 } else if (change < 0) {

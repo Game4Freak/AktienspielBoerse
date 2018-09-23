@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * The activity showing all available companies / shares
@@ -72,32 +73,88 @@ public class SharesActivity extends AppCompatActivity {
         JSONArray jA = new JSONArray();
         JSONObject jObjTemp = new JSONObject();
         try {
+            Random r = new Random();
+
+
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
-            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 94.47);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 8);
+            JSONArray jArray = new JSONArray();
+            double worth = 132.98;
+            for (int i = 0; i < 100; i++) {
+                worth = r.nextGaussian() * 20 + worth;
+                if (worth <= 0) {
+                    worth = -(worth + 1);
+                }
+                if (i == 99) {
+                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
+                }
+                jArray.put(worth);
+                System.out.println(worth);
+            }
+            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
             jA.put(jObjTemp);
+
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
-            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 238.24);
             jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
             jObjTemp.put(getResources().getString(R.string.countCompany), 5);
+            jArray = new JSONArray();
+            worth = 237.25;
+            for (int i = 0; i < 100; i++) {
+                worth = r.nextGaussian() * 20 + worth;
+                if (worth <= 0) {
+                    worth = -(worth + 1);
+                }
+                if (i == 99) {
+                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
+                }
+                jArray.put(worth);
+            }
+            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
             jA.put(jObjTemp);
+
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
-            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 147.23);
             jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 26);
+            jArray = new JSONArray();
+            worth = 147.23;
+            for (int i = 0; i < 100; i++) {
+                worth = r.nextGaussian() * 20 + worth;
+                if (worth <= 0) {
+                    worth = -(worth + 1);
+                }
+                if (i == 99) {
+                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
+                }
+                jArray.put(worth);
+            }
+            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
             jA.put(jObjTemp);
+
 
             jObjTemp = new JSONObject();
             jObjTemp.put(getResources().getString(R.string.nameCompany), "VW AG");
-            jObjTemp.put(getResources().getString(R.string.currentWorthCompany), 152.98);
             jObjTemp.put(getResources().getString(R.string.changeCompany), -3.1);
             jObjTemp.put(getResources().getString(R.string.countCompany), 0);
+            jArray = new JSONArray();
+            worth = 357.12;
+            for (int i = 0; i < 100; i++) {
+                worth = r.nextGaussian() * 20 + worth;
+                if (worth <= 0) {
+                    worth = -(worth + 1);
+                }
+                if (i == 99) {
+                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
+                }
+                jArray.put(worth);
+            }
+            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
             jA.put(jObjTemp);
+
 
             jObj.put(getResources().getString(R.string.company), jA);
         } catch (JSONException e) {

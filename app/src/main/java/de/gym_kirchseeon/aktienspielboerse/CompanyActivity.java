@@ -27,10 +27,9 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Random;
 
 /**
  * The activity showing details about a company
@@ -38,7 +37,6 @@ import java.util.Random;
 public class CompanyActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    //private AppBarLayout toolbarLayout;
     private FloatingActionButton fab;
     private FloatingActionButton fabCancel;
     private FloatingActionButton fabBuy;
@@ -61,12 +59,15 @@ public class CompanyActivity extends AppCompatActivity {
     private String keyWorth;
     private String keyChange;
     private String keyCount;
+    private String keyCurrentWorth;
 
     private JSONObject company;
     private String name;
-    private double worth;
+    private double currentWorth;
     private double change;
     private int count;
+    private JSONArray worth;
+
     private boolean isRefreshing;
     private LineGraphSeries<DataPoint> graphSeries;
 
@@ -76,17 +77,20 @@ public class CompanyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_company);
 
         keyName = getResources().getString(R.string.nameCompany);
-        keyWorth = getResources().getString(R.string.currentWorthCompany);
+        keyCurrentWorth = getResources().getString(R.string.currentWorthCompany);
         keyChange = getResources().getString(R.string.changeCompany);
         keyCount = getResources().getString(R.string.countCompany);
+        keyWorth = getResources().getString(R.string.worthCompany);
+
 
         try {
             Intent i = getIntent();
             company = new JSONObject(i.getStringExtra("company"));
             name = company.getString(keyName);
-            worth = company.getDouble(keyWorth);
+            currentWorth = company.getDouble(keyCurrentWorth);
             change = company.getDouble(keyChange);
             count = company.getInt(keyCount);
+            worth = company.getJSONArray(keyWorth);
         } catch (JSONException e) {
             Log.e("JSONException", e.getMessage());
         }
@@ -104,7 +108,6 @@ public class CompanyActivity extends AppCompatActivity {
         fabBuy = findViewById(R.id.fabBuy);
         fabSell = findViewById(R.id.fabSell);
         backgroundChart = findViewById(R.id.backgroundChart);
-        //toolbarLayout = findViewById(R.id.abCompanyLayout);
         spinnerScale = findViewById(R.id.spinnerScale);
         scrollCompany = findViewById(R.id.scrollCompany);
         refreshCompany = findViewById(R.id.refreshCompany);
@@ -115,7 +118,7 @@ public class CompanyActivity extends AppCompatActivity {
         setupGraph(0, 99);
         isRefreshing = false;
 
-        worthCompanyTxt.setText(String.format("%.2f€", worth));
+        worthCompanyTxt.setText(String.format("%.2f€", currentWorth));
         countCompanyTxt.setText(String.format("%d", count));
         changeCompanyTxt.setText(String.format("%+.1f%%", change));
         if (change > 0) {
@@ -175,11 +178,6 @@ public class CompanyActivity extends AppCompatActivity {
             @Override
             public void onScrollChanged() {
                 int scroll = scrollCompany.getScrollY();
-                /*if (scroll == 0) {
-                    toolbarLayout.setElevation(0);
-                } else {
-                    toolbarLayout.setElevation(8);
-                }*/
 
                 if (scroll < backgroundChart.getHeight()) {
                     scrollUpCompany.setVisibility(View.INVISIBLE);
@@ -309,7 +307,7 @@ public class CompanyActivity extends AppCompatActivity {
         buyBtn = layout.findViewById(R.id.buyBtn);
 
         companyNameBuyTxt.setText(name);
-        companyWorthBuyTxt.setText(String.format("%.2f€", worth));
+        companyWorthBuyTxt.setText(String.format("%.2f€", currentWorth));
         buyCountPicker.setMinValue(1);
         buyCountPicker.setMaxValue(100);
 
@@ -322,7 +320,7 @@ public class CompanyActivity extends AppCompatActivity {
                     int countBuy = buyCountPicker.getValue();
                     //TODO: Kaufen
                     dialogBuy.dismiss();
-                    buy(String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, worth * countBuy));
+                    buy(String.format("Du hast %d Aktien von %s für %.2f€ gekauft", countBuy, name, currentWorth * countBuy));
                 }
             });
         } else {
@@ -334,7 +332,7 @@ public class CompanyActivity extends AppCompatActivity {
                     int countSell = buyCountPicker.getValue();
                     //TODO: Verkaufen
                     dialogBuy.dismiss();
-                    sell(String.format("Du hast %d Aktien von %s für %.2f€ verkauft", countSell, name, worth * countSell));
+                    sell(String.format("Du hast %d Aktien von %s für %.2f€ verkauft", countSell, name, currentWorth * countSell));
                 }
             });
         }
@@ -377,33 +375,29 @@ public class CompanyActivity extends AppCompatActivity {
     private void setupGraph(int minX, int maxX) {
         graphView.removeAllSeries();
 
-        if(graphSeries == null) {
-            Random r = new Random();
-            double worth = 200;
 
-            DataPoint[] dataPoints = new DataPoint[100];
-            for (int i = 0; i < 100; i++) {
-                worth = r.nextGaussian() * 20 + worth;
-                if (worth <= 0) {
-                    worth = -(worth + 1);
-                }
-                dataPoints[i] = new DataPoint(i, worth);
+        DataPoint[] dataPoints = new DataPoint[100];
+        for (int i = 0; i < worth.length(); i++) {
+            try {
+                dataPoints[i] = new DataPoint(i, worth.getDouble(i));
+            } catch (JSONException e) {
+                Log.e("JSONException", e.getMessage());
             }
-
-            graphSeries = new LineGraphSeries<>(dataPoints);
-
-            double max = dataPoints[0].getY();
-            for (int i = 1; i < dataPoints.length; i++) {
-                if (dataPoints[i].getY() > max) {
-                    max = dataPoints[i].getY();
-                }
-            }
-
-
-            graphView.getViewport().setYAxisBoundsManual(true);
-            graphView.getViewport().setMinY(0);
-            graphView.getViewport().setMaxY(max + 50);
         }
+
+        graphSeries = new LineGraphSeries<>(dataPoints);
+
+        double max = dataPoints[0].getY();
+        for (int i = 1; i < dataPoints.length; i++) {
+            if (dataPoints[i].getY() > max) {
+                max = dataPoints[i].getY();
+            }
+        }
+
+
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMinY(0);
+        graphView.getViewport().setMaxY(max + 50);
 
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setMinX(minX);
