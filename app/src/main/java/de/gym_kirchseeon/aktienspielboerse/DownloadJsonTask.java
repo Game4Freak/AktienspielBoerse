@@ -18,7 +18,7 @@ import java.net.URL;
  * Don't use this class for your own purposes. Only used by RestClient.
  */
 
-public class DownloadJsonTask extends AsyncTask<String, Void, JSONObject> {
+/*public class DownloadJsonTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected JSONObject doInBackground(String... strings) {
@@ -47,3 +47,4 @@ public class DownloadJsonTask extends AsyncTask<String, Void, JSONObject> {
         return null; //TODO: ERSETZEN! nur für Kompilieren drinnen
     }
 }
+*/
