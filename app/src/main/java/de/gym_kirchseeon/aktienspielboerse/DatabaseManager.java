@@ -20,11 +20,18 @@ public class DatabaseManager extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_WERT + " INTEGER,"
+                + KEY_NAME + " TEXT," + KEY_DESCRIPTION + " TEXT" + ")";
+        db.execSQL(CREATE_TABLE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE);
+
+        onCreate(db);
 
     }
 }
