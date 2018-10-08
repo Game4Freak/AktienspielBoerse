@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 
 public class WikipediaDownloader {
 
+    JSONObject wikiresponse;
 
     public WikipediaDownloader(Context context) {
 
@@ -41,11 +42,13 @@ public class WikipediaDownloader {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+
                     @Override
                     public void onResponse(String response) {
+
                         try {
                             JSONObject jobj = null;
-                            jobj = new JSONObject(response);
+                            wikiresponse = new JSONObject(response);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -59,9 +62,20 @@ public class WikipediaDownloader {
         });
 
 
-     //   queue.add(stringRequest);
+        queue.add(stringRequest);
 
-        return new JSONObject(); // TODO Return muss entfernt werden und durch jobj aus der stringRequest ersetzt werden. stringRequest muss durch queue.add(stringRequest) noch gestartet werden!
+        if(wikiresponse == null) {
+            try {
+                wikiresponse = new JSONObject("Networking Error");
+            }
+            catch (JSONException e) {
+
+            }
+            return wikiresponse;
+        }
+        else {
+            return wikiresponse;
+        }
     }
 }
 
