@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -22,13 +23,13 @@ public class WikipediaDownloader {
 
     public WikipediaDownloader(Context context) {
 
-        RequestQueue queue = Volley.newRequestQueue(context);
+
     }
 
 
-    public JSONObject downloadDescription(String company) {
+    public JSONObject downloadDescription(Context context, String company) {
         String urlcompany = "";
-
+        RequestQueue queue = Volley.newRequestQueue(context);
 
         try {
             urlcompany = URLEncoder.encode(company, StandardCharsets.UTF_8.toString());
@@ -49,7 +50,6 @@ public class WikipediaDownloader {
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -58,7 +58,10 @@ public class WikipediaDownloader {
             }
         });
 
-        return new JSONObject(); // TODO Return muss entfernt werden und durch jobj aus der stringRequest ersetzt werden. stringRequest muss durch queue.add(stsringRequest) noch gestartet werden!
+
+     //   queue.add(stringRequest);
+
+        return new JSONObject(); // TODO Return muss entfernt werden und durch jobj aus der stringRequest ersetzt werden. stringRequest muss durch queue.add(stringRequest) noch gestartet werden!
     }
 }
 
