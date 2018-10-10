@@ -5,8 +5,7 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -25,17 +24,17 @@ import java.nio.charset.StandardCharsets;
 
 public class WikipediaDownloader {
 
-    JSONObject wikiresponse;
+    private String extract;
+    private RequestQueue queue;
 
     public WikipediaDownloader(Context context) {
-
+        queue = Volley.newRequestQueue(context);
 
     }
 
 
-    public JSONObject downloadDescription(Context context, String company) {
+    public String downloadDescription(String company) {
         String urlcompany = "";
-        RequestQueue queue = Volley.newRequestQueue(context);
 
         try {
             urlcompany = URLEncoder.encode(company, StandardCharsets.UTF_8.toString());
@@ -47,41 +46,29 @@ public class WikipediaDownloader {
                 "&exintro&explaintext&redirects=1&titles=" + urlcompany;
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
 
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
 
                         try {
-                            wikiresponse = new JSONObject(response);
-                        }
-                        catch (JSONException e) {
+                            extract = response.getJSONObject("query").getJSONObject("pages")
+                                    .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
+                                            .names().getString(0)).getString("extract");
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
+                }, null);
 
 
-        queue.add(stringRequest);
+        queue.add(jsObjRequest);
 
-        if(wikiresponse == null) {
-            try {
-                wikiresponse = new JSONObject("Networking Error");
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return wikiresponse;
+        if (extract == null)    {
+            extract = "An unknown error occured.";
         }
-        else {
-            return wikiresponse;
-        }
+        return extract;
     }
 }
 
