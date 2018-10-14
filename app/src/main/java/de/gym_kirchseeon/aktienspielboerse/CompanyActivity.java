@@ -129,6 +129,14 @@ public class CompanyActivity extends AppCompatActivity {
             changeCompanyTxt.setTextColor(Color.parseColor("#d50000"));
         }
 
+        WikipediaDownloader wikipediaDownloader = new WikipediaDownloader(CompanyActivity.this);
+        wikipediaDownloader.downloadDescription(name, new ServerCallback() {
+            @Override
+            public void onSuccess(String extract) {
+                companyDescriptionTxt.setText(extract);
+            }
+        });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -405,9 +413,5 @@ public class CompanyActivity extends AppCompatActivity {
         graphView.getViewport().setMaxX(maxX);
 
         graphView.addSeries(graphSeries);
-    }
-
-    public void setCompanyDescriptionTxt(String description) {
-        companyDescriptionTxt.setText(description);
     }
 }
