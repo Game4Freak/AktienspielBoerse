@@ -35,7 +35,7 @@ public class WikipediaDownloader {
     }
 
 
-    public void downloadDescription(String company, final ServerCallback callback) {
+    public void downloadDescription(String company, String language, final ServerCallback callback) {
         String urlcompany = "";
 
         try {
@@ -44,7 +44,7 @@ public class WikipediaDownloader {
             e.printStackTrace();
         }
 
-        String url = "https://de.wikipedia.org/w/api.php?format=json&action=query&prop=extracts" +
+        String url = "https://" + language + ".wikipedia.org/w/api.php?format=json&action=query&prop=extracts" +
                 "&exintro&explaintext&redirects=1&titles=" + urlcompany;
 
         if (urlcompany == null) {
