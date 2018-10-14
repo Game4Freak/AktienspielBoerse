@@ -47,6 +47,9 @@ public class WikipediaDownloader {
         String url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts" +
                 "&exintro&explaintext&redirects=1&titles=" + urlcompany;
 
+        if (urlcompany == null) {
+            extract = "An url encoding error has occured.";
+        }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
