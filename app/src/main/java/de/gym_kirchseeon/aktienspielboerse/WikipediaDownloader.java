@@ -21,11 +21,11 @@ import java.nio.charset.StandardCharsets;
 
     Run downloadDescription(Context context, String company) with context as your local context and
     company as the name of the company of which you want to fetch the description.
- */
+*/
 
 public class WikipediaDownloader {
 
-    private String extract;
+    private String extract = "";
     private RequestQueue queue;
     private JSONArray names;
 
@@ -35,7 +35,7 @@ public class WikipediaDownloader {
     }
 
 
-    public String downloadDescription(String company) {
+    public void downloadDescription(String company, final ServerCallback callback) {
         String urlcompany = "";
 
         try {
@@ -49,7 +49,7 @@ public class WikipediaDownloader {
 
         if (urlcompany == null) {
             extract = "An url encoding error has occured.";
-            return extract;
+          //  return extract;
         }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -65,6 +65,7 @@ public class WikipediaDownloader {
 
                             names = response.getJSONObject("query").getJSONObject("pages").names();
                             extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(names.getString(0)).getString("extract");
+                            callback.onSuccess(extract);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -75,9 +76,9 @@ public class WikipediaDownloader {
 
         queue.add(jsObjRequest);
 
-        if (extract == null)    {
-            extract = "An unknown error occured.";
+      //  if (extract == null)    {
+       //     extract = "Another unknown error occured.";
         }
-        return extract;
+       // return extract;
     }
-}
+//}
