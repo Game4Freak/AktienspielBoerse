@@ -8,7 +8,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +53,7 @@ public class WikipediaDownloader {
                     public void onResponse(JSONObject response) {
 
                         try {
-                            if (response.getJSONObject("query").getJSONObject("pages").names().getString(0) == "-1") {
+                            if (response.getJSONObject("query").getJSONObject("pages").names().getString(0).equals("-1")) {
                                 callback.onError();
                             }
                             extract = response.getJSONObject("query").getJSONObject("pages")
