@@ -54,7 +54,7 @@ public class WikipediaDownloader {
                     public void onResponse(JSONObject response) {
 
                         try {
-                            if (response.getJSONObject("query").getJSONObject("pages").names().getString(0) == "-1") {
+                            if (response.getJSONObject("query").getJSONObject("pages").names().getString(0).equals("-1")) {
                                 callback.onError();
                             }
                             extract = response.getJSONObject("query").getJSONObject("pages")
