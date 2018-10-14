@@ -27,7 +27,7 @@ public class WikipediaDownloader {
 
     private String extract = "";
     private RequestQueue queue;
-    private JSONArray names;
+  //  private JSONArray names;
 
     public WikipediaDownloader(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -49,7 +49,6 @@ public class WikipediaDownloader {
 
         if (urlcompany == null) {
             extract = "An url encoding error has occured.";
-          //  return extract;
         }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -59,12 +58,12 @@ public class WikipediaDownloader {
                     public void onResponse(JSONObject response) {
 
                         try {
-                       /*     extract = response.getJSONObject("query").getJSONObject("pages")
+                            extract = response.getJSONObject("query").getJSONObject("pages")
                                     .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
-                                            .names().getString(0)).getString("extract");   */
+                                            .names().getString(0)).getString("extract");
 
-                            names = response.getJSONObject("query").getJSONObject("pages").names();
-                            extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(names.getString(0)).getString("extract");
+          //                  names = response.getJSONObject("query").getJSONObject("pages").names();
+          //                  extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(names.getString(0)).getString("extract");
                             callback.onSuccess(extract);
 
                         } catch (JSONException e) {
