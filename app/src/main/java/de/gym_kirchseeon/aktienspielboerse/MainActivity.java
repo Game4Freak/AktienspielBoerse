@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             jObjTemp = new JSONObject();
-            jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo");
+            jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo K.K.");
             jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
             jObjTemp.put(getResources().getString(R.string.countCompany), 26);
             jArray = new JSONArray();

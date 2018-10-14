@@ -133,11 +133,12 @@ public class CompanyActivity extends AppCompatActivity {
         wikipediaDownloader.downloadDescription(name, "de", new ServerCallback() {
             @Override
             public void onSuccess(String extract) {
-                if (extract != null) {
-                    companyDescriptionTxt.setText(extract);
-                } else {
-                    companyDescriptionTxt.setText("Es konnte keine Beschreibung geholt werden.");
-                }
+                companyDescriptionTxt.setText(extract);
+            }
+
+            @Override
+            public void onError() {
+                companyDescriptionTxt.setText("Es konnte keine Beschreibung gefunden werden.");
             }
         });
 
