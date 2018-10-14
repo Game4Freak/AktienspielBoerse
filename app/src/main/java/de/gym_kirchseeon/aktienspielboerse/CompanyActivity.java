@@ -51,6 +51,7 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView changeCompanyTxt;
     private TextView companyNameBuyTxt;
     private TextView companyWorthBuyTxt;
+    private TextView companyDescriptionTxt;
     private NumberPicker buyCountPicker;
     private Button buyBtn;
     private GraphView graphView;
@@ -114,6 +115,7 @@ public class CompanyActivity extends AppCompatActivity {
         worthCompanyTxt = findViewById(R.id.worthCompanyTxt);
         countCompanyTxt = findViewById(R.id.countCompanyTxt);
         changeCompanyTxt = findViewById(R.id.changeCompanyTxt);
+        companyDescriptionTxt = findViewById(R.id.companyDescriptionTxt);
         graphView = findViewById(R.id.graphShare);
         setupGraph(0, 99);
         isRefreshing = false;
@@ -127,6 +129,10 @@ public class CompanyActivity extends AppCompatActivity {
             changeCompanyTxt.setTextColor(Color.parseColor("#d50000"));
         }
 
+        WikipediaDownloader wikipediaDownloader = new WikipediaDownloader(CompanyActivity.this);
+        String description = wikipediaDownloader.downloadDescription(name);
+        companyDescriptionTxt.setText(description);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,13 +143,13 @@ public class CompanyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fab.setVisibility(View.INVISIBLE);
-                fabCancel.setVisibility(View.VISIBLE);
+                fab.hide();
+                fabCancel.show();
                 fabCancel.bringToFront();
 
-                fabBuy.setVisibility(View.VISIBLE);
+                fabBuy.show();
                 if (count != 0) {
-                    fabSell.setVisibility(View.VISIBLE);
+                    fabSell.show();
                 }
 
                 fabBuy.animate().setDuration(100).translationY(-getResources().getDimensionPixelOffset(R.dimen.fab_buy));

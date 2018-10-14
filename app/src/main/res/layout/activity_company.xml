@@ -190,6 +190,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/companyDescriptionTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/recycler_vertical_margin"
