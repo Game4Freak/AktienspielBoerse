@@ -129,10 +129,6 @@ public class CompanyActivity extends AppCompatActivity {
             changeCompanyTxt.setTextColor(Color.parseColor("#d50000"));
         }
 
-        WikipediaDownloader wikipediaDownloader = new WikipediaDownloader(CompanyActivity.this);
-        String description = wikipediaDownloader.downloadDescription(name);
-        companyDescriptionTxt.setText(description);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -360,7 +356,7 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        fab.setVisibility(View.VISIBLE);
+        fab.show();
         fab.bringToFront();
 
         fabBuy.animate().setDuration(100).translationY(0f);
@@ -369,10 +365,9 @@ public class CompanyActivity extends AppCompatActivity {
                         new Runnable() {
                             @Override
                             public void run() {
-                                fabBuy.setVisibility(View.INVISIBLE);
-                                fabSell.setVisibility(View.INVISIBLE);
-
-                                fabCancel.setVisibility(View.INVISIBLE);
+                                fabBuy.hide();
+                                fabSell.hide();
+                                fabCancel.hide();
                             }
                         }
                 );
@@ -410,5 +405,9 @@ public class CompanyActivity extends AppCompatActivity {
         graphView.getViewport().setMaxX(maxX);
 
         graphView.addSeries(graphSeries);
+    }
+
+    public void setCompanyDescriptionTxt(String description) {
+        companyDescriptionTxt.setText(description);
     }
 }
