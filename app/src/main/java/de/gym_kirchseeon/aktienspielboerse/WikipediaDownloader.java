@@ -27,7 +27,6 @@ public class WikipediaDownloader {
 
     private String extract = "";
     private RequestQueue queue;
-  //  private JSONArray names;
 
     public WikipediaDownloader(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -47,9 +46,6 @@ public class WikipediaDownloader {
         String url = "https://" + language + ".wikipedia.org/w/api.php?format=json&action=query&prop=extracts" +
                 "&exintro&explaintext&redirects=1&titles=" + urlcompany;
 
-        if (urlcompany == null) {
-            extract = "An url encoding error has occured.";
-        }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -61,9 +57,6 @@ public class WikipediaDownloader {
                             extract = response.getJSONObject("query").getJSONObject("pages")
                                     .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
                                             .names().getString(0)).getString("extract");
-
-          //                  names = response.getJSONObject("query").getJSONObject("pages").names();
-          //                  extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(names.getString(0)).getString("extract");
                             callback.onSuccess(extract);
 
                         } catch (JSONException e) {
@@ -75,9 +68,6 @@ public class WikipediaDownloader {
 
         queue.add(jsObjRequest);
 
-      //  if (extract == null)    {
-       //     extract = "Another unknown error occured.";
+
         }
-       // return extract;
     }
-//}

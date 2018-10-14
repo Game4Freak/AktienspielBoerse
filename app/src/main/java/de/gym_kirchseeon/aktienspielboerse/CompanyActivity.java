@@ -130,7 +130,7 @@ public class CompanyActivity extends AppCompatActivity {
         }
 
         WikipediaDownloader wikipediaDownloader = new WikipediaDownloader(CompanyActivity.this);
-        wikipediaDownloader.downloadDescription(name, new ServerCallback() {
+        wikipediaDownloader.downloadDescription(name, "de", new ServerCallback() {
             @Override
             public void onSuccess(String extract) {
                 companyDescriptionTxt.setText(extract);
