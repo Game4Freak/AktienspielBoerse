@@ -197,7 +197,7 @@
                     android:paddingLeft="@dimen/recycler_horizontal_margin"
                     android:paddingRight="@dimen/recycler_horizontal_margin"
                     android:paddingTop="@dimen/recycler_vertical_margin"
-                    android:text="@string/large_text" />
+                    android:text="Hole Beschreibung..." />
 
                 <View
                     android:layout_width="match_parent"
