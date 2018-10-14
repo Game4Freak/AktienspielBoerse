@@ -15,13 +15,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-/*
-    The helper class for downloading (by now) only wikipedia abstracts of given companies.
-
-    Run downloadDescription(Context context, String company) with context as your local context and
-    company as the name of the company of which you want to fetch the description.
-*/
-
+/**
+ * The helper class for downloading (by now) only wikipedia abstracts of given companies.
+ */
 public class WikipediaDownloader {
 
     private String extract = "";
@@ -29,10 +25,15 @@ public class WikipediaDownloader {
 
     public WikipediaDownloader(Context context) {
         queue = Volley.newRequestQueue(context);
-
     }
 
-
+    /**
+     * Downloads the description of the given company.
+     *
+     * @param company  The name of the company
+     * @param language The language (e.g. en, de)
+     * @param callback The interface to use the description
+     */
     public void downloadDescription(String company, String language, final ServerCallback callback) {
         String urlcompany = "";
 
@@ -69,7 +70,5 @@ public class WikipediaDownloader {
 
 
         queue.add(jsObjRequest);
-
-
-        }
     }
+}
