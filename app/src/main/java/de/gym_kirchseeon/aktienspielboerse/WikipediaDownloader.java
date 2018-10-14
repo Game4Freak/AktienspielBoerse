@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +27,7 @@ public class WikipediaDownloader {
 
     private String extract;
     private RequestQueue queue;
+    private JSONArray names;
 
     public WikipediaDownloader(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -53,9 +55,13 @@ public class WikipediaDownloader {
                     public void onResponse(JSONObject response) {
 
                         try {
-                            extract = response.getJSONObject("query").getJSONObject("pages")
+                       /*     extract = response.getJSONObject("query").getJSONObject("pages")
                                     .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
-                                            .names().getString(0)).getString("extract");
+                                            .names().getString(0)).getString("extract");   */
+
+                            names = response.getJSONObject("query").getJSONObject("pages").names();
+                            extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(names.getString(0)).getString("extract");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -71,4 +77,3 @@ public class WikipediaDownloader {
         return extract;
     }
 }
-
