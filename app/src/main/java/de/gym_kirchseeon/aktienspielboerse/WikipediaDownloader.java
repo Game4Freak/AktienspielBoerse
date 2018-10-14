@@ -49,6 +49,7 @@ public class WikipediaDownloader {
 
         if (urlcompany == null) {
             extract = "An url encoding error has occured.";
+            return extract;
         }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
