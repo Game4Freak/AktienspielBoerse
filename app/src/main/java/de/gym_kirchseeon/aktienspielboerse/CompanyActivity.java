@@ -10,6 +10,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Pattern;
 
 /**
  * The activity showing details about a company
@@ -52,6 +55,7 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView companyNameBuyTxt;
     private TextView companyWorthBuyTxt;
     private TextView companyDescriptionTxt;
+    private TextView companyDescriptionSourceTxt;
     private NumberPicker buyCountPicker;
     private Button buyBtn;
     private GraphView graphView;
@@ -116,6 +120,7 @@ public class CompanyActivity extends AppCompatActivity {
         countCompanyTxt = findViewById(R.id.countCompanyTxt);
         changeCompanyTxt = findViewById(R.id.changeCompanyTxt);
         companyDescriptionTxt = findViewById(R.id.companyDescriptionTxt);
+        companyDescriptionSourceTxt = findViewById(R.id.companyDescriptionSourceTxt);
         graphView = findViewById(R.id.graphShare);
         setupGraph(0, 99);
         isRefreshing = false;
@@ -132,8 +137,13 @@ public class CompanyActivity extends AppCompatActivity {
         WikipediaDownloader wikipediaDownloader = new WikipediaDownloader(CompanyActivity.this);
         wikipediaDownloader.downloadDescription(name, "de", new ServerCallback() {
             @Override
-            public void onSuccess(String extract) {
+            public void onSuccess(String extract, String URL) {
                 companyDescriptionTxt.setText(extract);
+
+                String source = "(Beschreibung von Wikipedia)";
+                companyDescriptionSourceTxt.setText(source);
+                Pattern pattern = Pattern.compile("Wikipedia");
+                Linkify.addLinks(companyDescriptionSourceTxt, pattern, "https://de.wikipedia.org/?curid=" + URL);
             }
 
             @Override

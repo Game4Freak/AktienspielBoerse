@@ -22,6 +22,7 @@ public class WikipediaDownloader {
 
     private String extract = "";
     private RequestQueue queue;
+    private String URL = "";
 
     public WikipediaDownloader(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -60,7 +61,10 @@ public class WikipediaDownloader {
                             extract = response.getJSONObject("query").getJSONObject("pages")
                                     .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
                                             .names().getString(0)).getString("extract");
-                            callback.onSuccess(extract);
+                            URL = response.getJSONObject("query").getJSONObject("pages")
+                                    .getJSONObject(response.getJSONObject("query").getJSONObject("pages")
+                                            .names().getString(0)).getString("pageid");
+                            callback.onSuccess(extract, URL);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
