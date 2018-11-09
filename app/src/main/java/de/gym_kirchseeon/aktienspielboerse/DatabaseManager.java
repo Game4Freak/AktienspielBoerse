@@ -6,12 +6,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "aktienspieldaten";
-    public static final String TABLE = "aktienspiel";
+    public static final String DATABASE_NAME = "aktienspielData";
+    public static final String TABLE = "companyShares";
     public static final String KEY_ID = "id";
-    public static final String KEY_WERT = "wert";
-    public static final String KEY_NAME = "companyname";
-    public static final String KEY_DESCRIPTION = "description";
+    // Abkürzung des Unternehmens
+    public static final String KEY_SHORT = "companyShort";
+    // Name des Unternehmens
+    public static final String KEY_NAME = "companyName";
+    // letzter Wert vor den aktuellen Wert, um Aussage über Kursänderung treffen zu können (Kurs steigt / sinkt)
+    public static final String KEY_SHARES0 = "companyShare0";
+    // aktueller Wert
+    public static final String KEY_SHARES1 = "companyShare1";
+    // anzahl der gekauften Aktien
+    public static final String KEY_AMOUNT = "sharesAmount";
 
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -20,8 +27,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_WERT + " INTEGER,"
-                + KEY_NAME + " TEXT," + KEY_DESCRIPTION + " TEXT" + ")";
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SHORT + " TEXT,"
+                + KEY_NAME + " TEXT," + KEY_SHARES0 + " FLOAT," + KEY_SHARES1 + " FLOAT," + KEY_AMOUNT + " INTEGER" + ")";
         db.execSQL(CREATE_TABLE);
 
     }
