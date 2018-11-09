@@ -1,5 +1,7 @@
 package de.gym_kirchseeon.aktienspielboerse;
 
+import org.json.JSONObject;
+
 /**
  * Used to use the description from WIkipedia Downloader.
  */
