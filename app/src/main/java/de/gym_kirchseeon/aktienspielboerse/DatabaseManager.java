@@ -19,7 +19,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TABLE = "companyShares";
     public static final String KEY_ID = "id";
     // Abkürzung des Unternehmens
-    public static final String KEY_SHORT = "companyShort";
+    public static final String KEY_SYMBOL = "companySymbol";
     // Name des Unternehmens
     public static final String KEY_NAME = "companyName";
     // letzten 100 werte
@@ -37,7 +37,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SHORT + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SYMBOL + " TEXT,"
                 + KEY_NAME + " TEXT,";
         for (int i = 0; i < KEY_SHARES.length; i++){
             CREATE_TABLE = CREATE_TABLE + KEY_SHARES[i] + " FLOAT,";
@@ -78,26 +78,26 @@ public class DatabaseManager extends SQLiteOpenHelper {
             for (int i = 0; i < KEY_SHARES.length; i++){
                 values.put(KEY_SHARES[i], "22.2"); //jeder einzelne eintrag
             }
-            db.update(TABLE, values, KEY_SHORT + "=?", new String[]{n});
+            db.update(TABLE, values, KEY_SYMBOL + "=?", new String[]{n});
         }
     }
 
-    public void updateDatabaseByShort(String companyShort){
+    public void updateDatabaseByShort(String companySymbol){
         SQLiteDatabase db = this.getWritableDatabase();
-        JSONObject shares = new JSONObject(); //Restclient getCompany... companyShort
+        JSONObject shares = new JSONObject(); //Restclient getCompany... companySymbol
 
         ContentValues values = new ContentValues();
         for (int i = 0; i < KEY_SHARES.length; i++){
             values.put(KEY_SHARES[i], "22.2"); //jeder einzelne eintrag
         }
-        db.update(TABLE, values, KEY_SHORT + "=?", new String[]{companyShort});
+        db.update(TABLE, values, KEY_SYMBOL + "=?", new String[]{companySymbol});
     }
 
-    public void updateSharesAmountByCompanyShort(String companyShort, int amount){
+    public void updateSharesAmountBycompanySymbol(String companySymbol, int amount){
 
     }
 
-    public JSONObject getCompanyByCompanyShort(String companyShort){
+    public JSONObject getCompanyBycompanySymbol(String companySymbol){
         return new JSONObject();
     }
 
