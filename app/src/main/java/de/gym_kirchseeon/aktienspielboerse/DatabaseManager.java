@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -102,6 +103,36 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public List<JSONObject> getAllCompanies() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        List<JSONObject> companyList = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                JSONObject companydata = new JSONObject();
+
+                try {
+                    companydata.put("symbol", cursor.getString(1));
+                    companydata.put("companyname", cursor.getString(2));
+                    for(int i = 0; i < KEY_SHARES.length; i++) {
+                        companydata.put("share" + i, cursor.getFloat(i));
+                    }
+                    companydata.put("sharesamount", cursor.getInt(100));
+
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                companyList.add(companydata);
+            } while(cursor.moveToNext());
+        }   
+
+
         return new ArrayList<JSONObject>();
     }
 }
