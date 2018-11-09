@@ -130,9 +130,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
                 companyList.add(companydata);
             } while(cursor.moveToNext());
-        }   
+        }
 
 
-        return new ArrayList<JSONObject>();
+        return companyList;
     }
 }
