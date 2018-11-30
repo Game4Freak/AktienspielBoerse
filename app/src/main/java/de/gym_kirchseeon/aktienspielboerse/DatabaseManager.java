@@ -60,7 +60,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         List<String> symbolList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE;
+        String selectQuery = "SELECT * FROM " + TABLE;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -95,7 +95,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public void updateSharesAmountBycompanySymbol(String companySymbol, int amount){
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(KEY_AMOUNT, amount);
+        db.update(TABLE, values, KEY_SYMBOL + "=?", new String[]{companySymbol});
     }
 
     public JSONObject getCompanyBycompanySymbol(String companySymbol){
@@ -109,7 +113,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         sList[KEY_SHARES.length + 2] = KEY_AMOUNT;
 
-        String selectQuery = "SELECT  * FROM " + TABLE + " WHERE " + KEY_SYMBOL + " = " + companySymbol;
+        String selectQuery = "SELECT * FROM " + TABLE + " WHERE " + KEY_SYMBOL + " = " + companySymbol;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -144,7 +148,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         List<JSONObject> companyList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE;
+        String selectQuery = "SELECT * FROM " + TABLE;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
