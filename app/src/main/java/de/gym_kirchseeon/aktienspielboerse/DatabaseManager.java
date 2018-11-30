@@ -58,7 +58,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void updateDatabaseAll(){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        List<String> shortList = new ArrayList<>();
+        List<String> symbolList = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + TABLE;
 
@@ -66,13 +66,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-               shortList.add(cursor.getString(1));
+               symbolList.add(cursor.getString(1));
             } while(cursor.moveToNext());
         }
 
         db = this.getWritableDatabase();
 
-        for ( String n: shortList ){
+        for ( String n: symbolList ){
             JSONObject shares = new JSONObject(); //Restclient getCompany... n
 
             ContentValues values = new ContentValues();
@@ -83,7 +83,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
     }
 
-    public void updateDatabaseByShort(String companySymbol){
+    public void updateDatabaseBysymbol(String companySymbol){
         SQLiteDatabase db = this.getWritableDatabase();
         JSONObject shares = new JSONObject(); //Restclient getCompany... companySymbol
 
@@ -99,7 +99,44 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public JSONObject getCompanyBycompanySymbol(String companySymbol){
-        return new JSONObject();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] sList = new String[103];
+        sList[0] = KEY_NAME;
+        sList[1] = KEY_SYMBOL;
+        for (int i = 2; i < KEY_SHARES.length + 2; i++){
+
+        }
+        sList[KEY_SHARES.length + 2] = KEY_AMOUNT;
+
+        String selectQuery = "SELECT  * FROM " + TABLE + " WHERE " + KEY_SYMBOL + " = " + companySymbol;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        JSONObject companydata = new JSONObject();
+
+        if(cursor.moveToFirst()){
+            do {
+                try {
+                    companydata.put("symbol", cursor.getString(1));
+                    companydata.put("companyname", cursor.getString(2));
+                    for(int i = 0; i < KEY_SHARES.length; i++) {
+                        companydata.put("share" + i, cursor.getFloat(i));
+                    }
+                    companydata.put("sharesamount", cursor.getInt(KEY_SHARES.length+3));
+
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } while(cursor.moveToNext());
+        }
+
+        return companydata;
     }
 
     public List<JSONObject> getAllCompanies() {
