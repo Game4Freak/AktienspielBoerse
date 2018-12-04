@@ -384,4 +384,16 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
             }
         }
     }
+
+    public void changeData(JSONObject jObj) {
+        try {
+            jObjArray = (JSONArray) jObj.get(keyCompany);
+            for (int i = 0; i < jObjArray.length(); i++) {
+                jObjList.add(jObjArray.getJSONObject(i));
+            }
+        } catch (JSONException e) {
+            Log.e("JSONException", e.getMessage());
+        }
+        notifyDataSetChanged();
+    }
 }

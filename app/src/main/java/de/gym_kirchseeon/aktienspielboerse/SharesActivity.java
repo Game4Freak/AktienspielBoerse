@@ -212,6 +212,7 @@ public class SharesActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String text) {
+                //TODO: DB
                 cAdapter.getFilter().filter(text);
                 return false;
             }
@@ -317,5 +318,9 @@ public class SharesActivity extends AppCompatActivity {
      */
     public void sortByCountReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_COUNT_REVERSE);
+    }
+
+    public void changeData(JSONObject jObj) {
+        cAdapter.changeData(jObj);
     }
 }
