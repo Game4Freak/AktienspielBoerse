@@ -23,20 +23,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * The activity showing all available companies / shares
  */
 public class SharesActivity extends AppCompatActivity implements DBCallback {
 
+    private DatabaseManager dbm = new DatabaseManager(this);
     private JSONObject jObj = new JSONObject();
     private RecyclerView recyclerCompanies;
     private CompanyAdapter cAdapter;
@@ -70,93 +69,121 @@ public class SharesActivity extends AppCompatActivity implements DBCallback {
         refreshShares = findViewById(R.id.refreshShares);
         isRefreshing = false;
 
-        JSONArray jA = new JSONArray();
-        JSONObject jObjTemp = new JSONObject();
         try {
-            Random r = new Random();
-
-
-            jObjTemp.put(getResources().getString(R.string.nameCompany), "Tesla Inc.");
-            jObjTemp.put(getResources().getString(R.string.changeCompany), +0.3);
-            jObjTemp.put(getResources().getString(R.string.countCompany), 8);
-            JSONArray jArray = new JSONArray();
-            double worth = 132.98;
-            for (int i = 0; i < 100; i++) {
-                worth = r.nextGaussian() * 20 + worth;
-                if (worth <= 0) {
-                    worth = -(worth + 1);
-                }
-                if (i == 99) {
-                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
-                }
-                jArray.put(worth);
-                System.out.println(worth);
-            }
-            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
-            jA.put(jObjTemp);
-
-
-            jObjTemp = new JSONObject();
-            jObjTemp.put(getResources().getString(R.string.nameCompany), "BMW AG");
-            jObjTemp.put(getResources().getString(R.string.changeCompany), -0.7);
-            jObjTemp.put(getResources().getString(R.string.countCompany), 5);
-            jArray = new JSONArray();
-            worth = 237.25;
-            for (int i = 0; i < 100; i++) {
-                worth = r.nextGaussian() * 20 + worth;
-                if (worth <= 0) {
-                    worth = -(worth + 1);
-                }
-                if (i == 99) {
-                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
-                }
-                jArray.put(worth);
-            }
-            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
-            jA.put(jObjTemp);
-
-
-            jObjTemp = new JSONObject();
-            jObjTemp.put(getResources().getString(R.string.nameCompany), "Nintendo Co. Ltd.");
-            jObjTemp.put(getResources().getString(R.string.changeCompany), +2.3);
-            jObjTemp.put(getResources().getString(R.string.countCompany), 26);
-            jArray = new JSONArray();
-            worth = 147.23;
-            for (int i = 0; i < 100; i++) {
-                worth = r.nextGaussian() * 20 + worth;
-                if (worth <= 0) {
-                    worth = -(worth + 1);
-                }
-                if (i == 99) {
-                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
-                }
-                jArray.put(worth);
-            }
-            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
-            jA.put(jObjTemp);
-
-
-            jObjTemp = new JSONObject();
-            jObjTemp.put(getResources().getString(R.string.nameCompany), "VW AG");
-            jObjTemp.put(getResources().getString(R.string.changeCompany), -3.1);
-            jObjTemp.put(getResources().getString(R.string.countCompany), 0);
-            jArray = new JSONArray();
-            worth = 357.12;
-            for (int i = 0; i < 100; i++) {
-                worth = r.nextGaussian() * 20 + worth;
-                if (worth <= 0) {
-                    worth = -(worth + 1);
-                }
-                if (i == 99) {
-                    jObjTemp.put(getResources().getString(R.string.currentWorthCompany), worth);
-                }
-                jArray.put(worth);
-            }
-            jObjTemp.put(getResources().getString(R.string.worthCompany), jArray);
-            jA.put(jObjTemp);
-
-
-            jObj.put(getResources().getString(R.string.company), jA);
+            jObj = new JSONObject("{\n" +
+                    "    \"bestMatches\": [\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"A\",\n" +
+                    "            \"2. name\": \"Agilent Technologies Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"1.0000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"AAPL\",\n" +
+                    "            \"2. name\": \"Apple Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.5000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"AXNX\",\n" +
+                    "            \"2. name\": \"Axonics Modulation Technologies Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.5000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"AMZN\",\n" +
+                    "            \"2. name\": \"Amazon.com Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"AMD\",\n" +
+                    "            \"2. name\": \"Advanced Micro Devices Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"AMRN\",\n" +
+                    "            \"2. name\": \"Amarin Corporation plc\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"ACB\",\n" +
+                    "            \"2. name\": \"Aurora Cannabis Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"BABA\",\n" +
+                    "            \"2. name\": \"Alibaba Group Holding Limited\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"T\",\n" +
+                    "            \"2. name\": \"AT&T Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.4000\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"1. symbol\": \"ABBV\",\n" +
+                    "            \"2. name\": \"AbbVie Inc.\",\n" +
+                    "            \"3. type\": \"Equity\",\n" +
+                    "            \"4. region\": \"United States\",\n" +
+                    "            \"5. marketOpen\": \"09:30\",\n" +
+                    "            \"6. marketClose\": \"16:00\",\n" +
+                    "            \"7. timezone\": \"UTC-05\",\n" +
+                    "            \"8. currency\": \"USD\",\n" +
+                    "            \"9. matchScore\": \"0.2000\"\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}\n");
         } catch (JSONException e) {
             Log.e("JSONException", e.getMessage());
         }
@@ -207,13 +234,19 @@ public class SharesActivity extends AppCompatActivity implements DBCallback {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                dbm.addDBData(query, new DBCallback() {
+                    @Override
+                    public void onCompanyResult(JSONObject avresults) {
+                        cAdapter.changeData(avresults);
+                    }
+                });
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String text) {
                 //TODO: DB
-                cAdapter.getFilter().filter(text);
+                //cAdapter.getFilter().filter(text);
                 return false;
             }
         });

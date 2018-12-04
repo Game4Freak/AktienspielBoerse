@@ -62,14 +62,26 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
 
         jObjList = new ArrayList<>();
 
-        try {
-            jObjArray = (JSONArray) jObj.get(keyCompany);
-            for (int i = 0; i < jObjArray.length(); i++) {
-                jObjList.add(jObjArray.getJSONObject(i));
+        if (this.context == SHARES_ACTIVITY) {
+            try {
+                jObjArray = (JSONArray) jObj.get("bestMatches");
+                for (int i = 0; i < jObjArray.length(); i++) {
+                    jObjList.add(jObjArray.getJSONObject(i));
+                }
+            } catch (JSONException e) {
+                Log.e("JSONException", e.getMessage());
             }
-        } catch (JSONException e) {
-            Log.e("JSONException", e.getMessage());
+        } else if (this.context == MAIN_ACTIVITY) {
+            try {
+                jObjArray = (JSONArray) jObj.get(keyCompany);
+                for (int i = 0; i < jObjArray.length(); i++) {
+                    jObjList.add(jObjArray.getJSONObject(i));
+                }
+            } catch (JSONException e) {
+                Log.e("JSONException", e.getMessage());
+            }
         }
+
 
         sorting = SORT_ALPHABETICALLY;
 
@@ -136,20 +148,16 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
             }
         } else if (context == SHARES_ACTIVITY) {
             try {
-                String name = jObj.getString(keyName);
-                double worth = jObj.getDouble(keyWorth);
-                double change = jObj.getDouble(keyChange);
-                int count = jObj.getInt(keyCount);
+                String name = jObj.getString("2. name");
+                String currency = jObj.getString("8. currency");
+                String symbol = jObj.getString("1. symbol");
+                String region = jObj.getString("4. region");
 
                 holder.companyNameTxt.setText(name);
-                holder.shareWorthTxt.setText(String.format("%.2f€", worth));
-                holder.shareCountTxt.setText(String.format("%d", count));
-                holder.changeCompaniesTxt.setText(String.format("%+.1f%%", change));
-                if (change > 0) {
-                    holder.changeCompaniesTxt.setTextColor(Color.parseColor("#00c853"));
-                } else if (change < 0) {
-                    holder.changeCompaniesTxt.setTextColor(Color.parseColor("#d50000"));
-                }
+                holder.shareWorthTxt.setText(currency);
+                holder.shareCountTxt.setText(region);
+                holder.changeCompaniesTxt.setText(symbol);
+
             } catch (JSONException e) {
                 holder.companyNameTxt.setText("Fehler");
                 holder.shareWorthTxt.setText("Fehler");
@@ -387,7 +395,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
 
     public void changeData(JSONObject jObj) {
         try {
-            jObjArray = (JSONArray) jObj.get(keyCompany);
+            jObjArray = (JSONArray) jObj.get("bestMatches");
             for (int i = 0; i < jObjArray.length(); i++) {
                 jObjList.add(jObjArray.getJSONObject(i));
             }
