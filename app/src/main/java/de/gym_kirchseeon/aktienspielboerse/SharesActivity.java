@@ -35,7 +35,7 @@ import java.util.Random;
 /**
  * The activity showing all available companies / shares
  */
-public class SharesActivity extends AppCompatActivity {
+public class SharesActivity extends AppCompatActivity implements DBCallback {
 
     private JSONObject jObj = new JSONObject();
     private RecyclerView recyclerCompanies;
@@ -224,6 +224,11 @@ public class SharesActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onCompanyResult(JSONObject avresults) {
+        cAdapter.changeData(avresults);
+    }
+
     /**
      * Shows the sorting dialog
      */
@@ -318,9 +323,5 @@ public class SharesActivity extends AppCompatActivity {
      */
     public void sortByCountReverse(MenuItem item) {
         cAdapter.sort(CompanyAdapter.SORT_BY_COUNT_REVERSE);
-    }
-
-    public void changeData(JSONObject jObj) {
-        cAdapter.changeData(jObj);
     }
 }
