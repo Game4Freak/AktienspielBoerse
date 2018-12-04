@@ -15,6 +15,8 @@ import java.util.List;
 public class DatabaseManager extends SQLiteOpenHelper {
     private AlphaVantageDownloader restClient;
 
+    private Context context1;
+
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "aktienspielData";
     public static final String TABLE = "companyShares";
@@ -33,6 +35,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         for (int i = 0; i < 100; i++){
             KEY_SHARES[i] = "share" + i;
         }
+        context1 = context;
     }
 
     @Override
@@ -178,7 +181,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public void addDBData(String searchchars, final DBCallback callback) {
-        AlphaVantageDownloader downloader = new AlphaVantageDownloader();
+        AlphaVantageDownloader downloader = new AlphaVantageDownloader(context1);
         downloader.searchCompanyByName(searchchars, new AlphaVantageSearchCallback() {
             @Override
             public void onSuccessfulSearch(JSONObject companies) {
@@ -205,7 +208,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
 
-            
+
 
             callback.onCompanyResult(companies);
             }
