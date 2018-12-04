@@ -176,4 +176,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         return companyList;
     }
+
+    public JSONObject addDBData(JSONObject avoutput) {
+        
+    }
 }

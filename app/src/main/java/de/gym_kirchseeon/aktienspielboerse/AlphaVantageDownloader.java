@@ -21,6 +21,13 @@ public class AlphaVantageDownloader {
 
     public void searchCompanyByName(String companyname, final AlphaVantageSearchCallback callback) {
 
+        /**
+         * Downloads the search results for a given char sequence. Result via AlphaVantageCallback interface
+         * class as JSONObject.
+         *
+         * @param companyname
+         */
+
         String url = BASE_URL + "SYMBOL_SEARCH&keywords=" + companyname + "&apikey=" + API_KEY + "&datatype=json";
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
