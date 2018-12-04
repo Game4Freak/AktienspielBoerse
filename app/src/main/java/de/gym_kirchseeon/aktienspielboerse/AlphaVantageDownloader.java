@@ -1,9 +1,12 @@
 package de.gym_kirchseeon.aktienspielboerse;
 
+import android.content.Context;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +20,10 @@ public class AlphaVantageDownloader {
     private RequestQueue queue;
 
 
+    public AlphaVantageDownloader(Context context) {
+        queue = Volley.newRequestQueue(context);
+    }
+
 
 
     public void searchCompanyByName(String companyname, final AlphaVantageSearchCallback callback) {
@@ -27,6 +34,7 @@ public class AlphaVantageDownloader {
          *
          * @param companyname
          */
+
 
         String url = BASE_URL + "SYMBOL_SEARCH&keywords=" + companyname + "&apikey=" + API_KEY + "&datatype=json";
 
