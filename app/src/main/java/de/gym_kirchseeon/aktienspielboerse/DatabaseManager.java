@@ -183,7 +183,29 @@ public class DatabaseManager extends SQLiteOpenHelper {
             @Override
             public void onSuccessfulSearch(JSONObject companies) {
 
-                
+            int length = 0;
+
+
+            try {
+                length = companies.getJSONArray("bestMatches").length();
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+            }
+
+            String[] symbols = new String[length];
+            int[] sharescount = new int[length];
+
+            try {
+                for(int i = 0; i < length; i++) {
+                    symbols[i] = companies.getJSONArray("bestMatches").getJSONObject(i).toString();
+                }
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+            }
+
+            
 
             callback.onCompanyResult(companies);
             }
