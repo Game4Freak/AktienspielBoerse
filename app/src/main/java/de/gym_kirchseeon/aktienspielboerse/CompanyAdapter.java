@@ -154,8 +154,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
                 String region = jObj.getString("4. region");
 
                 holder.companyNameTxt.setText(name);
-                holder.shareWorthTxt.setText(currency);
-                holder.shareCountTxt.setText(region);
+                holder.shareWorthTxt.setText(region);
+                holder.shareCountTxt.setText(currency);
                 holder.changeCompaniesTxt.setText(symbol);
 
             } catch (JSONException e) {
@@ -394,6 +394,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.viewHold
     }
 
     public void changeData(JSONObject jObj) {
+        jObjList = new ArrayList<>();
         try {
             jObjArray = (JSONArray) jObj.get("bestMatches");
             for (int i = 0; i < jObjArray.length(); i++) {

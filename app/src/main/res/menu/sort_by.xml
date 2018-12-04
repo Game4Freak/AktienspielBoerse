@@ -12,24 +12,4 @@
         android:title="Z - A"
         android:onClick="sortAlphabeticallyReverse"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/countAscending"
-        android:onClick="sortByCount"
-        android:title="höchste Anzahl"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/countDescending"
-        android:onClick="sortByCountReverse"
-        android:title="niedrigste Anzahl"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/worthAscending"
-        android:onClick="sortByWorth"
-        android:title="höchster Wert"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/worthDescending"
-        android:onClick="sortByWorthReverse"
-        android:title="niedrigster Wert"
-        app:showAsAction="never" />
 </menu>
