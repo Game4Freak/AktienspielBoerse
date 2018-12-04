@@ -176,4 +176,15 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         return companyList;
     }
+
+    public JSONObject addDBData(String searchchars) {
+        AlphaVantageDownloader downloader = new AlphaVantageDownloader();
+        downloader.searchCompanyByName(searchchars, new AlphaVantageSearchCallback() {
+            @Override
+            public void onSuccessfulSearch(JSONObject companies) {
+                
+            }
+        });
+
+    }
 }
